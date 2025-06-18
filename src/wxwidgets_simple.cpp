@@ -20,26 +20,26 @@ public:
 // Frame principal de la aplicación (ventana principal)
 // Hereda de wxFrame para crear una ventana con menú, barra de estado, etc.
 class MyFrame : public wxFrame {
-public:
-    // Constructor que inicializa la ventana
-    MyFrame();
-    
-    // Manejadores de eventos (event handlers)
-    void OnHello(wxCommandEvent& event);    // Maneja el botón "Hola"
-    void OnExit(wxCommandEvent& event);     // Maneja el botón "Salir"
-    void OnAbout(wxCommandEvent& event);    // Maneja el menú "Acerca de"
-    void OnClose(wxCloseEvent& event);      // Maneja el cierre de la ventana
-    
-private:
-    // Función privada para inicializar SDL3
-    bool InitSDL();
-    
-    // Variables para el contexto de SDL3
-    SDL_Window* sdl_window;      // Ventana SDL (oculta, solo para demostración)
-    SDL_Renderer* sdl_renderer;  // Renderer SDL para gráficos
-    
-    // Macro de wxWidgets para declarar la tabla de eventos
-    DECLARE_EVENT_TABLE()
+    public:
+        // Constructor que inicializa la ventana
+        MyFrame();
+        
+        // Manejadores de eventos (event handlers)
+        void OnHello(wxCommandEvent& event);    // Maneja el botón "Hola"
+        void OnExit(wxCommandEvent& event);     // Maneja el botón "Salir"
+        void OnAbout(wxCommandEvent& event);    // Maneja el menú "Acerca de"
+        void OnClose(wxCloseEvent& event);      // Maneja el cierre de la ventana
+        
+    private:
+        // Función privada para inicializar SDL3
+        bool InitSDL();
+        
+        // Variables para el contexto de SDL3
+        SDL_Window* sdl_window;      // Ventana SDL (oculta, solo para demostración)
+        SDL_Renderer* sdl_renderer;  // Renderer SDL para gráficos
+        
+        // Macro de wxWidgets para declarar la tabla de eventos
+        DECLARE_EVENT_TABLE()
 };
 
 // Identificadores únicos para los elementos del menú
@@ -54,6 +54,8 @@ enum {
 wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(ID_Hello,   MyFrame::OnHello)  // Conecta ID_Hello con OnHello()
     EVT_MENU(wxID_EXIT,  MyFrame::OnExit)   // Conecta menú Salir con OnExit()
+    EVT_BUTTON(ID_Hello, MyFrame::OnHello)  // Conecta botón Hola con OnHello()
+    EVT_BUTTON(wxID_EXIT, MyFrame::OnExit)  // Conecta botón Salir con OnExit()
     EVT_MENU(wxID_ABOUT, MyFrame::OnAbout)  // Conecta menú Acerca de con OnAbout()
     EVT_CLOSE(MyFrame::OnClose)             // Conecta evento de cierre con OnClose()
 wxEND_EVENT_TABLE()
@@ -82,6 +84,15 @@ bool MyApp::OnInit() {
  * Aquí se configura toda la interfaz de usuario y se inicializa SDL3
  */
 MyFrame::MyFrame() : wxFrame(nullptr, wxID_ANY, "wxWidgets + SDL3 Demo") {
+    // === INICIALIZACIÓN DEL LOGGER ===
+    // Configurar spdlog con salida colorizada
+    auto console = spdlog::stdout_color_mt("wxWidgets_SDL3");
+    spdlog::set_default_logger(console);
+    spdlog::set_level(spdlog::level::debug);  // Mostrar mensajes debug también
+    spdlog::set_pattern("[%Y-%m-%d %H:%M:%S] [%^%l%$] %v");
+    
+    spdlog::info("Iniciando aplicación wxWidgets + SDL3");
+    
     // Inicializar punteros SDL a nullptr por seguridad
     sdl_window = nullptr;
     sdl_renderer = nullptr;
@@ -178,9 +189,11 @@ MyFrame::MyFrame() : wxFrame(nullptr, wxID_ANY, "wxWidgets + SDL3 Demo") {
  * Retorna true si la inicialización fue exitosa, false en caso contrario
  */
 bool MyFrame::InitSDL() {
+    spdlog::info("Inicializando SDL3...");
+    
     // Inicializar el subsistema de video de SDL3
     if (!SDL_Init(SDL_INIT_VIDEO)) {
-        std::cerr << "Error al inicializar SDL: " << SDL_GetError() << std::endl;
+        spdlog::error("Error al inicializar SDL: {}", SDL_GetError());
         return false;
     }
     
@@ -188,18 +201,18 @@ bool MyFrame::InitSDL() {
     // En una aplicación real, podrías integrar esta ventana en un panel wxWidgets
     sdl_window = SDL_CreateWindow("SDL3 Backend", 400, 300, SDL_WINDOW_HIDDEN);
     if (!sdl_window) {
-        std::cerr << "Error al crear ventana SDL: " << SDL_GetError() << std::endl;
+        spdlog::error("Error al crear ventana SDL: {}", SDL_GetError());
         return false;
     }
     
     // Crear renderer para operaciones de dibujo
     sdl_renderer = SDL_CreateRenderer(sdl_window, nullptr);
     if (!sdl_renderer) {
-        std::cerr << "Error al crear renderer SDL: " << SDL_GetError() << std::endl;
+        spdlog::error("Error al crear renderer SDL: {}", SDL_GetError());
         return false;
     }
     
-    std::cout << "SDL3 inicializado correctamente!" << std::endl;
+    spdlog::info("SDL3 inicializado correctamente!");
     return true;
 }
 
@@ -210,7 +223,9 @@ bool MyFrame::InitSDL() {
 
 // Manejador del botón/menú "Salir"
 void MyFrame::OnExit(wxCommandEvent& event) {
-    Close(true);  // Cerrar la ventana permitiendo que OnClose() haga la limpieza
+    spdlog::info("Usuario solicitó cerrar la aplicación");
+    // Cerrar la ventana forzando el cierre
+    Close(true);
 }
 
 // Manejador del menú "Acerca de"
@@ -227,11 +242,15 @@ void MyFrame::OnAbout(wxCommandEvent& event) {
 
 // Manejador del botón "Prueba de Funcionalidad"
 void MyFrame::OnHello(wxCommandEvent& event) {
+    spdlog::info("Ejecutando prueba de funcionalidad del sistema");
+    
     // Crear mensaje de estado del sistema
     std::string message = "✓ wxWidgets: Funcionando\n";
     
     // Probar funcionalidad de SDL3
     if (sdl_renderer) {
+        spdlog::debug("Probando renderizado SDL3...");
+        
         // Realizar una operación básica de renderizado como prueba
         // Pintar la ventana SDL de rojo
         SDL_SetRenderDrawColor(sdl_renderer, 255, 0, 0, 255);  // Rojo
@@ -240,9 +259,11 @@ void MyFrame::OnHello(wxCommandEvent& event) {
         
         message += "✓ SDL3: Funcionando\n";
         message += "✓ Integración: Exitosa";
+        spdlog::info("Prueba de SDL3 exitosa");
     } else {
         message += "✗ SDL3: Error\n";
         message += "⚠ Integración: Parcial";
+        spdlog::warn("SDL3 renderer no disponible");
     }
     
     // Mostrar resultado de la prueba
@@ -251,6 +272,8 @@ void MyFrame::OnHello(wxCommandEvent& event) {
 
 // Manejador del evento de cierre de ventana
 void MyFrame::OnClose(wxCloseEvent& event) {
+    spdlog::info("Cerrando aplicación - iniciando limpieza de recursos");
+    
     // === LIMPIEZA DE RECURSOS SDL3 ===
     // Es importante liberar los recursos de SDL3 antes de cerrar
     
@@ -258,18 +281,21 @@ void MyFrame::OnClose(wxCloseEvent& event) {
     if (sdl_renderer) {
         SDL_DestroyRenderer(sdl_renderer);
         sdl_renderer = nullptr;  // Evitar doble liberación
+        spdlog::debug("SDL renderer destruido");
     }
     
     // Destruir ventana si existe
     if (sdl_window) {
         SDL_DestroyWindow(sdl_window);
         sdl_window = nullptr;    // Evitar doble liberación
+        spdlog::debug("SDL window destruida");
     }
     
     // Finalizar SDL3 completamente
     SDL_Quit();
+    spdlog::info("SDL3 finalizado correctamente");
     
-    // Destruir la ventana wxWidgets
-    // Esto finaliza la aplicación
-    Destroy();
+    // Aceptar el evento de cierre y permitir que la ventana se cierre
+    event.Skip();
+    spdlog::info("Aplicación cerrada exitosamente");
 }

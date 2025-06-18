@@ -30,6 +30,13 @@ Este proyecto demuestra cómo integrar **wxWidgets** con **SDL3** para crear apl
 - Información de estado y feedback
 - Arquitectura escalable y mantenible
 
+### 📝 Sistema de Logging Profesional
+- **spdlog** integrado para logging moderno
+- Logs colorizados en consola
+- Niveles de logging configurables (debug, info, warn, error)
+- Formato de timestamps profesional
+- Fácil integración con sistemas de monitoreo
+
 ## Instalación de Dependencias
 
 ### macOS (Homebrew)
@@ -39,6 +46,9 @@ brew install wxwidgets
 
 # SDL3 debería estar ya instalado
 brew install sdl3  # Si no lo tienes
+
+# Instalar spdlog para logging profesional
+brew install spdlog
 ```
 
 ### Linux (Ubuntu/Debian)

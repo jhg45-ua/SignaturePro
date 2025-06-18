@@ -29,5 +29,9 @@
 // === RENDERIZADO GRÁFICO ===
 #include <SDL3/SDL.h>       // SDL3 para gráficos de alto rendimiento
 
+// === LOGGING ===
+#include <spdlog/spdlog.h>  // Sistema de logging moderno
+#include <spdlog/sinks/stdout_color_sinks.h>  // Salida colorizada a consola
+
 // === LIBRERÍAS ESTÁNDAR ===
 #include <iostream>         // Para entrada/salida de consola

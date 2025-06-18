@@ -8,6 +8,10 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 # Find SDL3 framework on macOS
 find_library(SDL3_LIBRARY SDL3 REQUIRED)
 
+# Find spdlog (installed via Homebrew)
+find_package(PkgConfig REQUIRED)
+pkg_check_modules(SPDLOG REQUIRED spdlog)
+
 # wxWidgets + SDL3 applications
 find_package(wxWidgets REQUIRED COMPONENTS core base)
 if(wxWidgets_FOUND)
@@ -21,6 +25,7 @@ if(wxWidgets_FOUND)
     # Include directories for wxWidgets apps
     target_include_directories(wxWidgets_Simple_Demo PRIVATE 
         ${wxWidgets_INCLUDE_DIRS}
+        ${SPDLOG_INCLUDE_DIRS}
         /Library/Frameworks/SDL3.framework/Headers
         /System/Library/Frameworks/SDL3.framework/Headers
     )
@@ -29,6 +34,7 @@ if(wxWidgets_FOUND)
     target_link_libraries(wxWidgets_Simple_Demo 
         ${wxWidgets_LIBRARIES}
         ${SDL3_LIBRARY}
+        ${SPDLOG_LIBRARIES}
     )
     
     # Set output directory for wxWidgets apps
