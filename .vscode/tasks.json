@@ -11,6 +11,32 @@
 			],
 			"args": [],
 			"isBackground": false
+		},
+		{
+			"label": "build",
+			"type": "shell",
+			"command": "cmake",
+			"args": ["--build", "build"],
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
+			"options": {
+				"cwd": "${workspaceFolder}"
+			},
+			"problemMatcher": ["$gcc"],
+			"detail": "Compilar la aplicación wxWidgets + SDL3"
+		},
+		{
+			"label": "run",
+			"type": "shell",
+			"command": "./build/bin/wxWidgets_Modular_Demo",
+			"group": "test",
+			"options": {
+				"cwd": "${workspaceFolder}"
+			},
+			"dependsOn": "build",
+			"detail": "Ejecutar la aplicación"
 		}
 	]
 }

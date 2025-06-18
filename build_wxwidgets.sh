@@ -34,12 +34,12 @@ if [ $? -eq 0 ]; then
     echo "✅ Compilación exitosa!"
     echo ""
     echo "🚀 Ejecutables disponibles:"
-    if [ -f "./bin/wxWidgets_Simple_Demo" ]; then
-        echo "   • ./bin/wxWidgets_Simple_Demo (Demo wxWidgets + SDL3) ✓"
+    if [ -f "./bin/wxWidgets_Modular_Demo" ]; then
+        echo "   • ./bin/wxWidgets_Modular_Demo (Demo wxWidgets + SDL3 - Versión Modular) ✓"
     fi
     echo ""
     echo "🎯 Para ejecutar:"
-    echo "   cd build && ./bin/wxWidgets_Simple_Demo    # Aplicación principal"
+    echo "   cd build && ./bin/wxWidgets_Modular_Demo    # Aplicación modular"
 else
     echo "❌ Error en la compilación"
     exit 1

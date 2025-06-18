@@ -38,42 +38,59 @@ if(wxWidgets_FOUND)
     # Incluir configuración automática de wxWidgets
     include(${wxWidgets_USE_FILE})
     
-    # === CREACIÓN DEL EJECUTABLE PRINCIPAL ===
-    # Aplicación de demostración wxWidgets + SDL3
-    add_executable(wxWidgets_Simple_Demo
-        src/wxwidgets_simple.cpp  # Código fuente principal
+    # === CREACIÓN DE EJECUTABLES ===
+    
+    # Aplicación modular (arquitectura separada)
+    add_executable(wxWidgets_Modular_Demo
+        src/main_modular.cpp      # Punto de entrada modular
+        src/my_app.cpp           # Clase aplicación principal
+        src/my_frame.cpp         # Clase frame principal
+        src/sdl3_manager.cpp     # Manager de SDL3
+        src/logger.cpp           # Sistema de logging
     )
+    
+    # NOTA: La versión original monolítica se movió a archive/ como referencia
     
     # === DIRECTORIOS DE INCLUSIÓN ===
     # Configurar rutas donde buscar archivos de cabecera (.h/.hpp)
-    target_include_directories(wxWidgets_Simple_Demo PRIVATE 
+    
+    # Directorios comunes para el ejecutable modular
+    set(COMMON_INCLUDE_DIRS
         ${wxWidgets_INCLUDE_DIRS}                        # Headers de wxWidgets
         ${SPDLOG_INCLUDE_DIRS}                          # Headers de spdlog
         /Library/Frameworks/SDL3.framework/Headers      # SDL3 (Homebrew)
         /System/Library/Frameworks/SDL3.framework/Headers # SDL3 (Sistema)
+        src/                                            # Headers locales del proyecto
     )
     
+    target_include_directories(wxWidgets_Modular_Demo PRIVATE ${COMMON_INCLUDE_DIRS})
+    
     # === ENLAZADO DE LIBRERÍAS ===
-    # Vincular todas las librerías necesarias al ejecutable
-    target_link_libraries(wxWidgets_Simple_Demo 
+    # Vincular todas las librerías necesarias al ejecutable modular
+    
+    # Librerías necesarias
+    set(COMMON_LIBRARIES
         ${wxWidgets_LIBRARIES}  # Librerías de wxWidgets (GUI nativa)
         ${SDL3_LIBRARY}         # SDL3 framework (renderizado)
         ${SPDLOG_LIBRARIES}     # spdlog (sistema de logging)
     )
     
+    target_link_libraries(wxWidgets_Modular_Demo ${COMMON_LIBRARIES})
+    
     # === CONFIGURACIÓN DE SALIDA ===
     # Definir directorio donde se generará el ejecutable
-    set_target_properties(wxWidgets_Simple_Demo PROPERTIES
+    set_target_properties(wxWidgets_Modular_Demo PROPERTIES
         RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin  # Ejecutable en /build/bin/
     )
     
     # === CONFIGURACIÓN DE COMPILACIÓN ===
     # Aplicar definiciones y flags específicos de wxWidgets
-    target_compile_definitions(wxWidgets_Simple_Demo PRIVATE ${wxWidgets_DEFINITIONS}) # Macros de wxWidgets
-    target_compile_options(wxWidgets_Simple_Demo PRIVATE ${wxWidgets_CXX_FLAGS})       # Flags de compilación
+    target_compile_definitions(wxWidgets_Modular_Demo PRIVATE ${wxWidgets_DEFINITIONS})
+    target_compile_options(wxWidgets_Modular_Demo PRIVATE ${wxWidgets_CXX_FLAGS})
     
     # === MENSAJE DE CONFIRMACIÓN ===
-    message(STATUS "✅ wxWidgets encontrado - Las aplicaciones wxWidgets serán construidas")
+    message(STATUS "✅ wxWidgets encontrado - La aplicación modular será construida")
+    message(STATUS "   📦 wxWidgets_Modular_Demo - Versión con arquitectura modular")
 else()
     # === MENSAJE DE ADVERTENCIA ===
     message(WARNING "⚠️  wxWidgets no encontrado - Los ejemplos wxWidgets no serán construidos")

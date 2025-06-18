@@ -3,10 +3,13 @@
         {
             "name": "Mac",
             "includePath": [
-                "${workspaceFolder}/**",
+                "${workspaceFolder}/src",
+                "/opt/homebrew/Cellar/spdlog/1.15.3/include",
+                "/opt/homebrew/Cellar/fmt/11.2.0/include",
                 "/opt/homebrew/lib/wx/include/osx_cocoa-unicode-3.2",
                 "/opt/homebrew/include/wx-3.2",
-                "/Library/Frameworks/SDL3.framework/Headers"
+                "/Library/Frameworks/SDL3.framework/Headers",
+                "${workspaceFolder}/**"
             ],
             "defines": [
                 "_FILE_OFFSET_BITS=64",
@@ -14,7 +17,10 @@
                 "WXUSINGDLL",
                 "__WXMAC__",
                 "__WXOSX__",
-                "__WXOSX_COCOA__"
+                "__WXOSX_COCOA__",
+                "SPDLOG_SHARED_LIB",
+                "SPDLOG_COMPILED_LIB",
+                "SPDLOG_FMT_EXTERNAL"
             ],
             "macFrameworkPath": [
                 "/System/Library/Frameworks",
