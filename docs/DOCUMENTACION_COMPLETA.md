@@ -23,23 +23,23 @@ La aplicación demuestra cómo crear una arquitectura donde wxWidgets maneja la 
 ┌─────────────────────────────────────────────────────────────┐
 │                   MyFrame (wxWidgets)                       │
 │                  Ventana Principal                          │
-│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐        │
-│  │   Menús     │  │  Controles  │  │   Layout    │        │
-│  │             │  │             │  │             │        │
-│  └─────────────┘  └─────────────┘  └─────────────┘        │
+│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐          │
+│  │   Menús     │  │  Controles  │  │   Layout    │          │
+│  │             │  │             │  │             │          │
+│  └─────────────┘  └─────────────┘  └─────────────┘          │
 └─────────────────────┬───────────────────────────────────────┘
                       │ Utiliza
                       ▼
 ┌─────────────────────────────────────────────────────────────┐
 │                  SDL3Manager                                │
 │              Gestor de Renderizado                          │
-│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐        │
-│  │  Ventana    │  │  Renderer   │  │   Cleanup   │        │
-│  │   SDL3     │  │    SDL3     │  │  Automático │        │
-│  └─────────────┘  └─────────────┘  └─────────────┘        │
+│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐          │
+│  │  Ventana    │  │  Renderer   │  │   Cleanup   │          │
+│  │   SDL3     │  │    SDL3     │  │  Automático │           │
+│  └─────────────┘  └─────────────┘  └─────────────┘          │
 └─────────────────────────────────────────────────────────────┘
          ▲                           ▲
-         │                           │
+         │                             │
          ▼                           ▼
 ┌─────────────────┐         ┌─────────────────┐
 │    Logger       │         │   Constants     │
@@ -72,21 +72,20 @@ wxWidgets_SDL3/
 │
 ├── 💻 Código Fuente (src/)/
 │   ├── 🏠 Aplicación Principal/
-│   │   ├── main_modular.cpp        # Punto de entrada
+│   │   ├── main_modular.cpp        # Punto de entrada (incluye my_app.hpp)
 │   │   ├── my_app.hpp/cpp          # Clase aplicación wxWidgets
-│   │   └── my_frame.hpp/cpp        # Ventana principal
+│   │   └── my_frame.hpp/cpp        # Ventana principal e interfaz
 │   │
 │   ├── 🔧 Componentes Especializados/
-│   │   ├── sdl3_manager.hpp/cpp    # Gestor de SDL3
-│   │   ├── logger.hpp/cpp          # Sistema de logging
-│   │   └── constants.hpp           # Configuración global
+│   │   ├── sdl3_manager.hpp/cpp    # Gestor de SDL3 (independiente)
+│   │   ├── logger.hpp/cpp          # Sistema de logging (independiente)
+│   │   └── constants.hpp           # Configuración global (header-only)
 │   │
-│   └── 📚 Utilidades/
-│       ├── include.hpp             # Headers legacy (compatibilidad)
-│       └── ejemplo_uso_modular.cpp # Ejemplo de uso independiente
+│   └── 📚 Ejemplos y Demostraciones/
+│       └── ejemplo_uso_modular.cpp # Demostración de uso independiente
 │
 ├── 📦 Archivo (archive/)/
-│   └── wxwidgets_simple.cpp        # Versión original monolítica
+│   └── (Versión original monolítica archivada)
 │
 └── 🏗️ Build/
     └── bin/
@@ -429,6 +428,21 @@ cd build && ./bin/wxWidgets_Modular_Demo
    - Eventos desacoplados de su manejo
    - Sistema de callbacks flexible
 
+## 🔄 **Evolución desde Sistema Monolítico**
+
+Esta estructura modular evolucionó desde un sistema anterior donde:
+
+- **❌ Antes**: Un archivo `include.hpp` contenía todas las inclusiones
+- **❌ Antes**: Un archivo `wxwidgets_simple.cpp` contenía toda la lógica (302 líneas)
+- **✅ Ahora**: Cada componente incluye solo lo que necesita
+- **✅ Ahora**: Separación en 11 archivos especializados (~800 líneas total)
+
+**Beneficios de la migración**:
+- 🎯 **Dependencias explícitas** en lugar de inclusiones ocultas
+- ⚡ **Compilación más rápida** al evitar recompilaciones innecesarias
+- 🔧 **Mantenimiento simplificado** con responsabilidades claras
+- ♻️ **Componentes reutilizables** en otros proyectos
+
 ## 🔮 Extensiones Futuras
 
 ### 🎵 **AudioManager**
@@ -473,7 +487,7 @@ class NetworkManager {
 | Métrica | Valor |
 |---------|-------|
 | **Líneas de Código** | ~800 líneas |
-| **Archivos Fuente** | 12 archivos |
+| **Archivos Fuente** | 11 archivos |
 | **Clases Principales** | 5 clases |
 | **Dependencias** | 3 externas |
 | **Tiempo de Compilación** | ~10 segundos |

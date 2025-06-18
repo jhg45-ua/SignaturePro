@@ -5,7 +5,7 @@
 ```
 ┌─────────────────────────────────────┐
 │              MyApp                  │
-│         <<wxApp>>                   │
+│            <<wxApp>>                │
 ├─────────────────────────────────────┤
 │ + OnInit() : bool                   │
 └─────────────────┬───────────────────┘
@@ -88,18 +88,18 @@ MyApp    MyFrame    SDL3Manager    Logger    wxWidgets
   │         │           │           │           │
   │ OnInit()│           │           │           │
   ├─────────┼───────────┼───────────┼───────────┤
-  │         │           │Initialize()│           │
+  │         │           │Initialize()│          │
   │         │           │           └───────────┤
   │         │           │                       │
   │new MyFrame()        │           │           │
   ├─────────┐           │           │           │
-  │         │ constructor│           │           │
+  │         │ constructor│          │           │
   │         ├───────────┼───────────┼───────────┤
   │         │           │           │           │
-  │         │ InitializeComponents() │           │
+  │         │ InitializeComponents()│           │
   │         ├───────────┼───────────┼───────────┤
   │         │           │           │           │
-  │         │Initialize()│           │           │
+  │         │Initialize()│          │           │
   │         ├───────────┐           │           │
   │         │           │SDL_Init() │           │
   │         │           ├───────────┼───────────┤
@@ -148,19 +148,19 @@ MyApp    MyFrame    SDL3Manager    Logger    wxWidgets
          │             │                │
          └──────┬──────┘                │
                 │                       │
-                ▼                       │
+                ▼                      │
          ┌─────────────┐                │
     ┌────┤ SDL_Init()  │                │
     │    │   Failed    │                │
     │    └─────────────┘                │
     │                                   │
     │    ┌─────────────┐                │
-    └────►Create Window│                │
+    └────►Create Window│               │
          │   Failed    │                │
          └─────────────┘                │
                                         │
          ┌─────────────┐                │
-    ┌────►Create Render│                │
+    ┌────►Create Render│               │
     │    │   Failed    │                │
     │    └─────────────┘                │
     │                                   │
@@ -173,13 +173,13 @@ MyApp    MyFrame    SDL3Manager    Logger    wxWidgets
          ┌─────────────┐
          │             │ TestRendering()
          │ Initialized │◄────────────────┐
-         │    Ready    │                 │
-         └──────┬──────┘                 │
-                │                       │
-                ▼                       │
-         ┌─────────────┐                │
-         │ Rendering   │                │
-         │   Active    ├────────────────┘
+         │    Ready    │                  │
+         └──────┬──────┘                  │
+                │                         │
+                ▼                        │
+         ┌─────────────┐                  │
+         │ Rendering   │                  │
+         │   Active    ├──────────────────┘
          └──────┬──────┘
                 │ Cleanup() or Destructor
                 ▼
@@ -195,15 +195,15 @@ MyApp    MyFrame    SDL3Manager    Logger    wxWidgets
     User         MyFrame      SDL3Manager      Logger       Dialog
      │             │              │             │            │
      │ Click Button│              │             │            │
-     ├─────────────►              │             │            │
+     ├─────────────►             │             │            │
      │             │              │             │            │
      │             │ OnHello()    │             │            │
-     │             ├──────────────┼─────────────►            │
+     │             ├──────────────┼─────────────►           │
      │             │              │             │ "Ejecutando│
      │             │              │             │ prueba..." │
      │             │              │             │            │
-     │             │TestRendering()│             │            │
-     │             ├──────────────►             │            │
+     │             │TestRendering()│            │            │
+     │             ├──────────────►            │            │
      │             │              │             │            │
      │             │              │IsInitialized()           │
      │             │              ├─────────────┼────────────┤
@@ -221,13 +221,13 @@ MyApp    MyFrame    SDL3Manager    Logger    wxWidgets
      │             │              ├─────────────┼────────────┤
      │             │              │             │            │
      │             │              │Log Success  │            │
-     │             │              ├─────────────►            │
+     │             │              ├─────────────►           │
      │             │              │             │ "Prueba    │
      │             │              │             │ exitosa"   │
      │             │              │ return true │            │
      │             │              ├─────────────┼────────────┤
      │             │ return true  │             │            │
-     │             │◄─────────────┤             │            │
+     │             │◄────────────┤             │            │
      │             │              │             │            │
      │             │Build Message │             │            │
      │             ├──────────────┼─────────────┼────────────┤
@@ -235,7 +235,7 @@ MyApp    MyFrame    SDL3Manager    Logger    wxWidgets
      │             │wxMessageBox()│             │            │
      │             ├──────────────┼─────────────┼────────────►
      │             │              │             │            │ Show Dialog
-     │◄────────────┼──────────────┼─────────────┼────────────┤ "✓ wxWidgets:
+     │◄───────────┼──────────────┼─────────────┼────────────┤ "✓ wxWidgets:
      │ Dialog      │              │             │            │  Funcionando
      │ Visible     │              │             │            │  ✓ SDL3:
      │             │              │             │            │  Funcionando
@@ -250,51 +250,51 @@ MyApp    MyFrame    SDL3Manager    Logger    wxWidgets
 │                    CAPA DE PRESENTACIÓN                     │
 │                      (User Interface)                       │
 ├─────────────────────────────────────────────────────────────┤
-│  MyFrame  │  wxMenuBar  │  wxPanel  │  wxButton  │  etc.   │
-│           │             │           │            │         │
-│  ┌─────────────┐ ┌─────────────┐ ┌─────────────┐          │
-│  │   Menús     │ │  Controles  │ │   Layout    │          │
-│  │   Nativos   │ │  wxWidgets  │ │  Managers   │          │
-│  └─────────────┘ └─────────────┘ └─────────────┘          │
+│  MyFrame  │  wxMenuBar  │  wxPanel  │  wxButton  │  etc.    │
+│           │             │           │            │          │
+│  ┌─────────────┐ ┌─────────────┐ ┌─────────────┐            │
+│  │   Menús     │ │  Controles  │ │   Layout    │            │
+│  │   Nativos   │ │  wxWidgets  │ │  Managers   │            │
+│  └─────────────┘ └─────────────┘ └─────────────┘            │
 └─────────────────────────────────────────────────────────────┘
                               │
                               ▼
 ┌─────────────────────────────────────────────────────────────┐
-│                     CAPA DE LÓGICA                         │
-│                   (Business Logic)                         │
+│                     CAPA DE LÓGICA                          │
+│                   (Business Logic)                          │
 ├─────────────────────────────────────────────────────────────┤
-│           MyApp          │        Event Handlers          │
-│                          │                                │
-│  ┌─────────────┐ ┌─────────────┐ ┌─────────────┐          │
-│  │ Application │ │   Events    │ │   Control   │          │
-│  │    Logic    │ │  Routing    │ │    Flow     │          │
-│  └─────────────┘ └─────────────┘ └─────────────┘          │
+│           MyApp          │        Event Handlers            │
+│                          │                                  │
+│  ┌─────────────┐ ┌─────────────┐ ┌─────────────┐            │
+│  │ Application │ │   Events    │ │   Control   │            │
+│  │    Logic    │ │  Routing    │ │    Flow     │            │
+│  └─────────────┘ └─────────────┘ └─────────────┘            │
 └─────────────────────────────────────────────────────────────┘
                               │
                               ▼
 ┌─────────────────────────────────────────────────────────────┐
-│                   CAPA DE SERVICIOS                        │
-│                   (Service Layer)                          │
+│                   CAPA DE SERVICIOS                         │
+│                   (Service Layer)                           │
 ├─────────────────────────────────────────────────────────────┤
-│  SDL3Manager  │    Logger     │   Constants   │  Utils    │
-│               │               │               │           │
-│  ┌─────────────┐ ┌─────────────┐ ┌─────────────┐          │
-│  │ Rendering   │ │  Logging    │ │    Config   │          │
-│  │  Service    │ │   Service   │ │   Service   │          │
-│  └─────────────┘ └─────────────┘ └─────────────┘          │
+│  SDL3Manager  │    Logger     │   Constants   │  Utils      │
+│               │               │               │             │
+│  ┌─────────────┐ ┌─────────────┐ ┌─────────────┐            │
+│  │ Rendering   │ │  Logging    │ │    Config   │            │
+│  │  Service    │ │   Service   │ │   Service   │            │
+│  └─────────────┘ └─────────────┘ └─────────────┘            │
 └─────────────────────────────────────────────────────────────┘
                               │
                               ▼
 ┌─────────────────────────────────────────────────────────────┐
-│                  CAPA DE INFRAESTRUCTURA                   │
-│                  (Infrastructure Layer)                    │
+│                  CAPA DE INFRAESTRUCTURA                    │
+│                  (Infrastructure Layer)                     │
 ├─────────────────────────────────────────────────────────────┤
-│   wxWidgets   │     SDL3      │   spdlog    │   System    │
-│               │               │             │             │
-│  ┌─────────────┐ ┌─────────────┐ ┌─────────────┐          │
-│  │    GUI      │ │  Graphics   │ │   Logging   │          │
-│  │ Framework   │ │    API      │ │    API      │          │
-│  └─────────────┘ └─────────────┘ └─────────────┘          │
+│   wxWidgets   │     SDL3      │   spdlog    │   System      │
+│               │               │             │               │
+│  ┌─────────────┐ ┌─────────────┐ ┌─────────────┐            │
+│  │    GUI      │ │  Graphics   │ │   Logging   │            │
+│  │ Framework   │ │    API      │ │    API      │            │
+│  └─────────────┘ └─────────────┘ └─────────────┘            │
 └─────────────────────────────────────────────────────────────┘
 ```
 
@@ -306,19 +306,19 @@ MyApp    MyFrame    SDL3Manager    Logger    wxWidgets
                 ▼
             include.hpp
                 │
-       ┌────────┼────────┐
+       ┌────────┼──────────┐
        ▼        ▼        ▼
    my_app.hpp  my_frame.hpp  constants.hpp
-       │        │               │
+       │        │                  │
        ▼        ▼               ▼
    my_app.cpp  my_frame.cpp   (header-only)
-              │        │
+              │         │
               ▼        ▼
       sdl3_manager.hpp  logger.hpp
-              │              │
+              │               │
               ▼              ▼
       sdl3_manager.cpp   logger.cpp
-              │              │
+              │               │
               ▼              ▼
             SDL3          spdlog
 ```
@@ -327,12 +327,12 @@ MyApp    MyFrame    SDL3Manager    Logger    wxWidgets
 
 ```
 ┌─────────────┐    User Input    ┌─────────────┐
-│             ├─────────────────► │             │
+│             ├───────────────► │             │
 │    User     │                  │   MyFrame   │
-│             │◄─────────────────┤             │
+│             │◄────────────────┤             │
 └─────────────┘   Visual Feedback└──────┬──────┘
-                                         │
-                                         ▼
+                                        │
+                                       ▼
                                   ┌─────────────┐
                                   │             │
                                   │Event Handler│
