@@ -1,0 +1,16 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Build wxWidgets App",
+			"type": "shell",
+			"command": "./build_wxwidgets.sh",
+			"group": "build",
+			"problemMatcher": [
+				"$gcc"
+			],
+			"args": [],
+			"isBackground": false
+		}
+	]
+}

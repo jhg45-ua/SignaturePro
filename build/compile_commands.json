@@ -1,0 +1,8 @@
+[
+{
+  "directory": "/Users/julianhinojosagil/Documents/Dev/wxWidgets_SDL3/build",
+  "command": "/usr/bin/c++ -DWXUSINGDLL -D_FILE_OFFSET_BITS=64 -D__WXMAC__ -D__WXOSX_COCOA__ -D__WXOSX__ -DwxDEBUG_LEVEL=0 -I/Library/Frameworks/SDL3.framework/Headers -I/System/Library/Frameworks/SDL3.framework/Headers -F/Library/Frameworks -isystem /opt/homebrew/lib/wx/include/osx_cocoa-unicode-3.2 -isystem /opt/homebrew/include/wx-3.2 -O3 -DNDEBUG -std=gnu++17 -arch arm64 -o CMakeFiles/wxWidgets_Simple_Demo.dir/src/wxwidgets_simple.cpp.o -c /Users/julianhinojosagil/Documents/Dev/wxWidgets_SDL3/src/wxwidgets_simple.cpp",
+  "file": "/Users/julianhinojosagil/Documents/Dev/wxWidgets_SDL3/src/wxwidgets_simple.cpp",
+  "output": "CMakeFiles/wxWidgets_Simple_Demo.dir/src/wxwidgets_simple.cpp.o"
+}
+]

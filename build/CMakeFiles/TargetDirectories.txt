@@ -1,0 +1,3 @@
+/Users/julianhinojosagil/Documents/Dev/wxWidgets_SDL3/build/CMakeFiles/wxWidgets_Simple_Demo.dir
+/Users/julianhinojosagil/Documents/Dev/wxWidgets_SDL3/build/CMakeFiles/edit_cache.dir
+/Users/julianhinojosagil/Documents/Dev/wxWidgets_SDL3/build/CMakeFiles/rebuild_cache.dir
