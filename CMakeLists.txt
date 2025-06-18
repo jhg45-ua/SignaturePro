@@ -1,52 +1,80 @@
-cmake_minimum_required(VERSION 3.20)
-project(wxWidgets_SDL3)
+# ==========================================
+# CONFIGURACIÓN PRINCIPAL DEL PROYECTO
+# ==========================================
+# Sistema de construcción CMake para aplicación wxWidgets + SDL3
+# Integra GUI nativa (wxWidgets) con renderizado de alto rendimiento (SDL3)
 
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+cmake_minimum_required(VERSION 3.20)  # Versión mínima de CMake requerida
+project(wxWidgets_SDL3)               # Nombre del proyecto
 
-# Find SDL3 framework on macOS
+# === CONFIGURACIÓN DEL ESTÁNDAR C++ ===
+set(CMAKE_CXX_STANDARD 17)            # Usar C++17 para características modernas
+set(CMAKE_CXX_STANDARD_REQUIRED ON)   # Hacer obligatorio el estándar especificado
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON) # Generar compile_commands.json para IDEs
+
+# ==========================================
+# BÚSQUEDA Y CONFIGURACIÓN DE DEPENDENCIAS
+# ==========================================
+
+# === SDL3 FRAMEWORK (macOS) ===
+# Buscar el framework SDL3 instalado en el sistema macOS
 find_library(SDL3_LIBRARY SDL3 REQUIRED)
 
-# Find spdlog (installed via Homebrew)
-find_package(PkgConfig REQUIRED)
-pkg_check_modules(SPDLOG REQUIRED spdlog)
+# === SPDLOG (LOGGING) ===
+# Buscar spdlog para logging (instalado vía Homebrew)
+find_package(PkgConfig REQUIRED)          # PkgConfig necesario para spdlog
+pkg_check_modules(SPDLOG REQUIRED spdlog) # Configurar spdlog
 
-# wxWidgets + SDL3 applications
+# ==========================================
+# CONFIGURACIÓN DE APLICACIONES WXWIDGETS
+# ==========================================
+
+# === BÚSQUEDA DE WXWIDGETS ===
+# Buscar wxWidgets con componentes core (ventanas, eventos) y base (utilidades)
 find_package(wxWidgets REQUIRED COMPONENTS core base)
+
+# Si wxWidgets se encuentra correctamente, proceder con la configuración
 if(wxWidgets_FOUND)
+    # Incluir configuración automática de wxWidgets
     include(${wxWidgets_USE_FILE})
     
-    # Create wxWidgets simple demo
+    # === CREACIÓN DEL EJECUTABLE PRINCIPAL ===
+    # Aplicación de demostración wxWidgets + SDL3
     add_executable(wxWidgets_Simple_Demo
-        src/wxwidgets_simple.cpp
+        src/wxwidgets_simple.cpp  # Código fuente principal
     )
     
-    # Include directories for wxWidgets apps
+    # === DIRECTORIOS DE INCLUSIÓN ===
+    # Configurar rutas donde buscar archivos de cabecera (.h/.hpp)
     target_include_directories(wxWidgets_Simple_Demo PRIVATE 
-        ${wxWidgets_INCLUDE_DIRS}
-        ${SPDLOG_INCLUDE_DIRS}
-        /Library/Frameworks/SDL3.framework/Headers
-        /System/Library/Frameworks/SDL3.framework/Headers
+        ${wxWidgets_INCLUDE_DIRS}                        # Headers de wxWidgets
+        ${SPDLOG_INCLUDE_DIRS}                          # Headers de spdlog
+        /Library/Frameworks/SDL3.framework/Headers      # SDL3 (Homebrew)
+        /System/Library/Frameworks/SDL3.framework/Headers # SDL3 (Sistema)
     )
     
-    # Link libraries for wxWidgets apps
+    # === ENLAZADO DE LIBRERÍAS ===
+    # Vincular todas las librerías necesarias al ejecutable
     target_link_libraries(wxWidgets_Simple_Demo 
-        ${wxWidgets_LIBRARIES}
-        ${SDL3_LIBRARY}
-        ${SPDLOG_LIBRARIES}
+        ${wxWidgets_LIBRARIES}  # Librerías de wxWidgets (GUI nativa)
+        ${SDL3_LIBRARY}         # SDL3 framework (renderizado)
+        ${SPDLOG_LIBRARIES}     # spdlog (sistema de logging)
     )
     
-    # Set output directory for wxWidgets apps
+    # === CONFIGURACIÓN DE SALIDA ===
+    # Definir directorio donde se generará el ejecutable
     set_target_properties(wxWidgets_Simple_Demo PROPERTIES
-        RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
+        RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin  # Ejecutable en /build/bin/
     )
     
-    # Set compiler flags for wxWidgets
-    target_compile_definitions(wxWidgets_Simple_Demo PRIVATE ${wxWidgets_DEFINITIONS})
-    target_compile_options(wxWidgets_Simple_Demo PRIVATE ${wxWidgets_CXX_FLAGS})
+    # === CONFIGURACIÓN DE COMPILACIÓN ===
+    # Aplicar definiciones y flags específicos de wxWidgets
+    target_compile_definitions(wxWidgets_Simple_Demo PRIVATE ${wxWidgets_DEFINITIONS}) # Macros de wxWidgets
+    target_compile_options(wxWidgets_Simple_Demo PRIVATE ${wxWidgets_CXX_FLAGS})       # Flags de compilación
     
-    message(STATUS "wxWidgets found - wxWidgets applications will be built")
+    # === MENSAJE DE CONFIRMACIÓN ===
+    message(STATUS "✅ wxWidgets encontrado - Las aplicaciones wxWidgets serán construidas")
 else()
-    message(WARNING "wxWidgets not found - wxWidgets examples will not be built")
+    # === MENSAJE DE ADVERTENCIA ===
+    message(WARNING "⚠️  wxWidgets no encontrado - Los ejemplos wxWidgets no serán construidos")
 endif()
