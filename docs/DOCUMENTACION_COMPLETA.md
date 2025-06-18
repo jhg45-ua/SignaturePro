@@ -35,7 +35,7 @@ La aplicación demuestra cómo crear una arquitectura donde wxWidgets maneja la 
 │              Gestor de Renderizado                          │
 │  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐          │
 │  │  Ventana    │  │  Renderer   │  │   Cleanup   │          │
-│  │   SDL3     │  │    SDL3     │  │  Automático │           │
+│  │   SDL3      │  │    SDL3     │  │  Automático │          │
 │  └─────────────┘  └─────────────┘  └─────────────┘          │
 └─────────────────────────────────────────────────────────────┘
          ▲                           ▲

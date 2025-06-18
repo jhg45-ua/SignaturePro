@@ -41,8 +41,8 @@ if(wxWidgets_FOUND)
     # === CREACIÓN DE EJECUTABLES ===
     
     # Aplicación modular (arquitectura separada)
-    add_executable(wxWidgets_Modular_Demo
-        src/main_modular.cpp      # Punto de entrada modular
+    add_executable(app
+        src/main.cpp      # Punto de entrada modular
         src/my_app.cpp           # Clase aplicación principal
         src/my_frame.cpp         # Clase frame principal
         src/sdl3_manager.cpp     # Manager de SDL3
@@ -63,7 +63,7 @@ if(wxWidgets_FOUND)
         src/                                            # Headers locales del proyecto
     )
     
-    target_include_directories(wxWidgets_Modular_Demo PRIVATE ${COMMON_INCLUDE_DIRS})
+    target_include_directories(app PRIVATE ${COMMON_INCLUDE_DIRS})
     
     # === ENLAZADO DE LIBRERÍAS ===
     # Vincular todas las librerías necesarias al ejecutable modular
@@ -75,22 +75,22 @@ if(wxWidgets_FOUND)
         ${SPDLOG_LIBRARIES}     # spdlog (sistema de logging)
     )
     
-    target_link_libraries(wxWidgets_Modular_Demo ${COMMON_LIBRARIES})
+    target_link_libraries(app ${COMMON_LIBRARIES})
     
     # === CONFIGURACIÓN DE SALIDA ===
     # Definir directorio donde se generará el ejecutable
-    set_target_properties(wxWidgets_Modular_Demo PROPERTIES
+    set_target_properties(app PROPERTIES
         RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin  # Ejecutable en /build/bin/
     )
     
     # === CONFIGURACIÓN DE COMPILACIÓN ===
     # Aplicar definiciones y flags específicos de wxWidgets
-    target_compile_definitions(wxWidgets_Modular_Demo PRIVATE ${wxWidgets_DEFINITIONS})
-    target_compile_options(wxWidgets_Modular_Demo PRIVATE ${wxWidgets_CXX_FLAGS})
+    target_compile_definitions(app PRIVATE ${wxWidgets_DEFINITIONS})
+    target_compile_options(app PRIVATE ${wxWidgets_CXX_FLAGS})
     
     # === MENSAJE DE CONFIRMACIÓN ===
     message(STATUS "✅ wxWidgets encontrado - La aplicación modular será construida")
-    message(STATUS "   📦 wxWidgets_Modular_Demo - Versión con arquitectura modular")
+    message(STATUS "   📦 app - Versión con arquitectura modular")
 else()
     # === MENSAJE DE ADVERTENCIA ===
     message(WARNING "⚠️  wxWidgets no encontrado - Los ejemplos wxWidgets no serán construidos")

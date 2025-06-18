@@ -43,6 +43,10 @@ MyFrame::~MyFrame() {
     // El destructor de SDL3Manager se encarga de la limpieza automáticamente
 }
 
+/**
+ * Inicializa los componentes de la ventana principal y SDL3.
+ * Configura el sistema de menús, barra de estado y la interfaz principal.
+ */
 void MyFrame::InitializeComponents() {
     // Inicializar SDL3 y actualizar barra de estado
     if (sdl_manager_->Initialize()) {

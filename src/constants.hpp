@@ -18,7 +18,7 @@ namespace Constants {
     namespace Window {
         static const int DEFAULT_WIDTH = 500;
         static const int DEFAULT_HEIGHT = 400;
-        static const char* TITLE = "wxWidgets + SDL3 Demo";
+        static const char* TITLE = "App";
     }
     
     // === CONFIGURACIÓN DE SDL ===
