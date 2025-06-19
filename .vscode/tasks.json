@@ -1,22 +1,56 @@
 {
 	"version": "2.0.0",
+	"options": {
+		"env": {
+			"PATH": "/opt/homebrew/bin:/usr/local/bin:${env:PATH}",
+			"PKG_CONFIG_PATH": "/opt/homebrew/lib/pkgconfig:/usr/local/lib/pkgconfig"
+		}
+	},
+	"inputs": [
+		{
+			"id": "buildType",
+			"description": "Tipo de build",
+			"default": "Debug",
+			"type": "pickString",
+			"options": [
+				"Debug",
+				"Release",
+				"RelWithDebInfo",
+				"MinSizeRel"
+			]
+		}
+	],
 	"tasks": [
 		{
-			"label": "Build wxWidgets App",
+			"label": "configure",
 			"type": "shell",
-			"command": "./build_wxwidgets.sh",
-			"group": "build",
-			"problemMatcher": [
-				"$gcc"
+			"command": "cmake",
+			"args": [
+				"-S", ".",
+				"-B", "build",
+				"-G", "Unix Makefiles",
+				"-DCMAKE_BUILD_TYPE=${input:buildType}",
+				"-DCMAKE_EXPORT_COMPILE_COMMANDS=ON"
 			],
-			"args": [],
-			"isBackground": false
+			"group": "build",
+			"options": {
+				"cwd": "${workspaceFolder}"
+			},
+			"problemMatcher": ["$gcc"],
+			"detail": "Configurar proyecto CMake con Unix Makefiles",
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": false,
+				"panel": "shared",
+				"showReuseMessage": true,
+				"clear": false
+			}
 		},
 		{
 			"label": "build",
 			"type": "shell",
-			"command": "cmake",
-			"args": ["--build", "build"],
+			"command": "./scripts/build.sh",
 			"group": {
 				"kind": "build",
 				"isDefault": true
@@ -25,18 +59,128 @@
 				"cwd": "${workspaceFolder}"
 			},
 			"problemMatcher": ["$gcc"],
-			"detail": "Compilar la aplicación wxWidgets + SDL3"
+			"detail": "Compilar la aplicación wxWidgets (paralelo) con información adicional",
+			"dependsOn": "configure",
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": false,
+				"panel": "shared",
+				"showReuseMessage": true,
+				"clear": false
+			}
+		},
+		{
+			"label": "clean",
+			"type": "shell",
+			"command": "rm",
+			"args": ["-rf", "build"],
+			"group": "build",
+			"options": {
+				"cwd": "${workspaceFolder}"
+			},
+			"detail": "Limpiar directorio de build",
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": false,
+				"panel": "shared",
+				"showReuseMessage": true,
+				"clear": false
+			}
+		},
+		{
+			"label": "rebuild",
+			"type": "shell",
+			"dependsOrder": "sequence",
+			"dependsOn": ["clean", "build"],
+			"group": "build",
+			"detail": "Limpiar y reconstruir completamente",
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": false,
+				"panel": "shared",
+				"showReuseMessage": true,
+				"clear": false
+			}
 		},
 		{
 			"label": "run",
 			"type": "shell",
-			"command": "./build/bin/wxWidgets_Modular_Demo",
+			"command": "./scripts/run.sh",
 			"group": "test",
 			"options": {
 				"cwd": "${workspaceFolder}"
 			},
 			"dependsOn": "build",
-			"detail": "Ejecutar la aplicación"
+			"detail": "Ejecutar la aplicación wxWidgets con verificación",
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": true,
+				"panel": "dedicated",
+				"showReuseMessage": false,
+				"clear": true
+			},
+			"isBackground": false
+		},
+		{
+			"label": "run-debug",
+			"type": "shell",
+			"command": "lldb",
+			"args": ["./build/bin/app"],
+			"group": "test",
+			"options": {
+				"cwd": "${workspaceFolder}"
+			},
+			"dependsOn": "build",
+			"detail": "Ejecutar la aplicación en modo debug con LLDB",
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": true,
+				"panel": "dedicated",
+				"showReuseMessage": false,
+				"clear": true
+			}
+		},
+		{
+			"label": "check-dependencies",
+			"type": "shell",
+			"command": "sh",
+			"args": ["-c", "echo '🔍 Verificando dependencias...' && brew list wxwidgets spdlog cmake && echo '✅ make disponible:' && which make"],
+			"group": "build",
+			"options": {
+				"cwd": "${workspaceFolder}"
+			},
+			"detail": "Verificar dependencias instaladas (wxwidgets, spdlog, cmake, make)",
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": false,
+				"panel": "shared",
+				"showReuseMessage": true,
+				"clear": false
+			}
+		},
+		{
+			"label": "project-info",
+			"type": "shell",
+			"command": "./scripts/project-info.sh",
+			"group": "build",
+			"options": {
+				"cwd": "${workspaceFolder}"
+			},
+			"detail": "Mostrar información y estadísticas del proyecto",
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": true,
+				"panel": "dedicated",
+				"showReuseMessage": false,
+				"clear": true
+			}
 		}
 	]
 }

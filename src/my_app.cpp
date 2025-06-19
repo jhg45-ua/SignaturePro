@@ -12,7 +12,7 @@ wxIMPLEMENT_APP(MyApp);
 bool MyApp::OnInit() {
     // Inicializar el sistema de logging
     Logger::Initialize();
-    spdlog::info("Iniciando aplicación wxWidgets + SDL3");
+    spdlog::info("Iniciando aplicación wxWidgets");
     
     // Crear la ventana principal
     MyFrame* frame = new MyFrame();

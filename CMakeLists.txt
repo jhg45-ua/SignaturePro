@@ -1,11 +1,11 @@
 # ==========================================
 # CONFIGURACIÓN PRINCIPAL DEL PROYECTO
 # ==========================================
-# Sistema de construcción CMake para aplicación wxWidgets + SDL3
-# Integra GUI nativa (wxWidgets) con renderizado de alto rendimiento (SDL3)
+# Sistema de construcción CMake para aplicación wxWidgets
+# Aplicación GUI nativa multiplataforma
 
 cmake_minimum_required(VERSION 3.20)  # Versión mínima de CMake requerida
-project(wxWidgets_SDL3)               # Nombre del proyecto
+project(wxWidgets_App)                # Nombre del proyecto
 
 # === CONFIGURACIÓN DEL ESTÁNDAR C++ ===
 set(CMAKE_CXX_STANDARD 17)            # Usar C++17 para características modernas
@@ -15,10 +15,6 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON) # Generar compile_commands.json para IDEs
 # ==========================================
 # BÚSQUEDA Y CONFIGURACIÓN DE DEPENDENCIAS
 # ==========================================
-
-# === SDL3 FRAMEWORK (macOS) ===
-# Buscar el framework SDL3 instalado en el sistema macOS
-find_library(SDL3_LIBRARY SDL3 REQUIRED)
 
 # === SPDLOG (LOGGING) ===
 # Buscar spdlog para logging (instalado vía Homebrew)
@@ -40,38 +36,32 @@ if(wxWidgets_FOUND)
     
     # === CREACIÓN DE EJECUTABLES ===
     
-    # Aplicación modular (arquitectura separada)
+    # Aplicación wxWidgets
     add_executable(app
-        src/main.cpp      # Punto de entrada modular
+        src/main.cpp      # Punto de entrada
         src/my_app.cpp           # Clase aplicación principal
         src/my_frame.cpp         # Clase frame principal
-        src/sdl3_manager.cpp     # Manager de SDL3
         src/logger.cpp           # Sistema de logging
     )
-    
-    # NOTA: La versión original monolítica se movió a archive/ como referencia
     
     # === DIRECTORIOS DE INCLUSIÓN ===
     # Configurar rutas donde buscar archivos de cabecera (.h/.hpp)
     
-    # Directorios comunes para el ejecutable modular
+    # Directorios para el ejecutable
     set(COMMON_INCLUDE_DIRS
         ${wxWidgets_INCLUDE_DIRS}                        # Headers de wxWidgets
         ${SPDLOG_INCLUDE_DIRS}                          # Headers de spdlog
-        /Library/Frameworks/SDL3.framework/Headers      # SDL3 (Homebrew)
-        /System/Library/Frameworks/SDL3.framework/Headers # SDL3 (Sistema)
         src/                                            # Headers locales del proyecto
     )
     
     target_include_directories(app PRIVATE ${COMMON_INCLUDE_DIRS})
     
     # === ENLAZADO DE LIBRERÍAS ===
-    # Vincular todas las librerías necesarias al ejecutable modular
+    # Vincular todas las librerías necesarias al ejecutable
     
     # Librerías necesarias
     set(COMMON_LIBRARIES
         ${wxWidgets_LIBRARIES}  # Librerías de wxWidgets (GUI nativa)
-        ${SDL3_LIBRARY}         # SDL3 framework (renderizado)
         ${SPDLOG_LIBRARIES}     # spdlog (sistema de logging)
     )
     
@@ -89,9 +79,9 @@ if(wxWidgets_FOUND)
     target_compile_options(app PRIVATE ${wxWidgets_CXX_FLAGS})
     
     # === MENSAJE DE CONFIRMACIÓN ===
-    message(STATUS "✅ wxWidgets encontrado - La aplicación modular será construida")
-    message(STATUS "   📦 app - Versión con arquitectura modular")
+    message(STATUS "✅ wxWidgets encontrado - La aplicación será construida")
+    message(STATUS "   📦 app - Aplicación wxWidgets")
 else()
     # === MENSAJE DE ADVERTENCIA ===
-    message(WARNING "⚠️  wxWidgets no encontrado - Los ejemplos wxWidgets no serán construidos")
+    message(WARNING "⚠️  wxWidgets no encontrado - La aplicación no será construida")
 endif()

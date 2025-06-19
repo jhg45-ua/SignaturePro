@@ -18,14 +18,7 @@ namespace Constants {
     namespace Window {
         static const int DEFAULT_WIDTH = 500;
         static const int DEFAULT_HEIGHT = 400;
-        static const char* TITLE = "App";
-    }
-    
-    // === CONFIGURACIÓN DE SDL ===
-    namespace SDL {
-        static const int WINDOW_WIDTH = 400;
-        static const int WINDOW_HEIGHT = 300;
-        static const char* WINDOW_TITLE = "SDL3 Backend";
+        static const char* TITLE = "wxWidgets App";
     }
     
     // === CONFIGURACIÓN DE FUENTES ===
@@ -36,28 +29,28 @@ namespace Constants {
     // === TEXTOS DE LA INTERFAZ ===
     namespace Text {
         static const char* INFO_TEXT = 
-            "Esta aplicación demuestra la integración de:\n"
-            "• wxWidgets para interfaz nativa\n"
-            "• SDL3 como backend de renderizado\n\n"
-            "Estado de SDL3: ";
+            "Esta aplicación demuestra las capacidades de wxWidgets:\n"
+            "• Interfaz nativa multiplataforma\n"
+            "• Sistema de eventos robusto\n"
+            "• Componentes profesionales\n\n"
+            "¡Aplicación lista para usar!";
             
         static const char* ABOUT_TEXT = 
-            "Aplicación de demostración que combina wxWidgets con SDL3.\n\n"
-            "wxWidgets: Interfaz nativa profesional\n"
-            "SDL3: Backend de renderizado de alto rendimiento\n\n"
-            "Esta arquitectura es ideal para aplicaciones que requieren\n"
-            "GUI profesional con capacidades gráficas avanzadas.";
+            "Aplicación de demostración con wxWidgets.\n\n"
+            "wxWidgets: Framework GUI multiplataforma\n"
+            "- Interfaz nativa en cada sistema operativo\n"
+            "- Amplia colección de controles\n"
+            "- Sistema de eventos potente\n\n"
+            "Ideal para aplicaciones de escritorio profesionales.";
             
-        static const char* ABOUT_TITLE = "Acerca de wxWidgets + SDL3";
+        static const char* ABOUT_TITLE = "Acerca de wxWidgets App";
         static const char* TEST_TITLE = "Test de Funcionalidad";
     }
     
     // === MENSAJES DE STATUS ===
     namespace Status {
-        static const char* SDL_INIT_SUCCESS = "SDL3 inicializado correctamente";
-        static const char* SDL_INIT_ERROR = "Error al inicializar SDL3";
-        static const char* APP_READY = "¡Aplicación wxWidgets + SDL3 lista!";
-        static const char* SDL_STATUS_OK = "✓ Inicializado";
-        static const char* SDL_STATUS_ERROR = "✗ Error";
+        static const char* APP_READY = "¡Aplicación wxWidgets lista!";
+        static const char* COMPONENTS_OK = "✓ Todos los componentes funcionando";
+        static const char* TEST_SUCCESS = "✓ Prueba exitosa";
     }
 }

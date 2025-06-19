@@ -8,10 +8,6 @@
 #pragma once
 
 #include <wx/wx.h>
-#include <memory>
-
-// Forward declarations
-class SDL3Manager;
 
 class MyFrame : public wxFrame {
     public:
@@ -39,8 +35,6 @@ class MyFrame : public wxFrame {
         void ConfigureLayout();       // Configura el layout y los sizers
         
         // === VARIABLES MIEMBRO ===
-        std::unique_ptr<SDL3Manager> sdl_manager_;  // Manager de SDL3
-        
         // Controles de la interfaz
         wxPanel* main_panel_;
         wxBoxSizer* main_sizer_;

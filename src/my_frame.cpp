@@ -3,7 +3,6 @@
  */
 
 #include "my_frame.hpp"
-#include "sdl3_manager.hpp"
 #include "constants.hpp"
 #include "logger.hpp"
 
@@ -28,7 +27,6 @@ wxEND_EVENT_TABLE()
 
 MyFrame::MyFrame() 
     : wxFrame(nullptr, wxID_ANY, Constants::Window::TITLE),
-      sdl_manager_(std::make_unique<SDL3Manager>()),
       main_panel_(nullptr),
       main_sizer_(nullptr),
       title_text_(nullptr),
@@ -40,21 +38,14 @@ MyFrame::MyFrame()
 }
 
 MyFrame::~MyFrame() {
-    // El destructor de SDL3Manager se encarga de la limpieza automáticamente
+    // Destructor simplificado sin SDL3
 }
 
 /**
- * Inicializa los componentes de la ventana principal y SDL3.
+ * Inicializa los componentes de la ventana principal.
  * Configura el sistema de menús, barra de estado y la interfaz principal.
  */
 void MyFrame::InitializeComponents() {
-    // Inicializar SDL3 y actualizar barra de estado
-    if (sdl_manager_->Initialize()) {
-        SetStatusText(Constants::Status::SDL_INIT_SUCCESS);
-    } else {
-        SetStatusText(Constants::Status::SDL_INIT_ERROR);
-    }
-    
     // Crear sistema de menús
     CreateMenuSystem();
     
@@ -102,7 +93,7 @@ void MyFrame::CreateMainInterface() {
     
     // Crear título principal
     title_text_ = new wxStaticText(main_panel_, wxID_ANY, 
-        "Demostración wxWidgets + SDL3", 
+        "Aplicación wxWidgets", 
         wxDefaultPosition, wxDefaultSize, wxALIGN_CENTER);
     
     // Configurar fuente del título
@@ -112,12 +103,7 @@ void MyFrame::CreateMainInterface() {
     title_text_->SetFont(titleFont);
     
     // Crear texto informativo
-    wxString infoText = Constants::Text::INFO_TEXT;
-    infoText += (sdl_manager_->IsInitialized() ? 
-                 Constants::Status::SDL_STATUS_OK : 
-                 Constants::Status::SDL_STATUS_ERROR);
-    
-    info_text_ = new wxStaticText(main_panel_, wxID_ANY, infoText,
+    info_text_ = new wxStaticText(main_panel_, wxID_ANY, Constants::Text::INFO_TEXT,
         wxDefaultPosition, wxDefaultSize, wxALIGN_CENTER);
     
     // Crear botones
@@ -152,25 +138,16 @@ void MyFrame::OnAbout(wxCommandEvent& event) {
 void MyFrame::OnHello(wxCommandEvent& event) {
     spdlog::info("Ejecutando prueba de funcionalidad del sistema");
     
-    std::string message = "✓ wxWidgets: Funcionando\n";
-    
-    // Probar funcionalidad de SDL3
-    if (sdl_manager_->TestRendering()) {
-        message += "✓ SDL3: Funcionando\n";
-        message += "✓ Integración: Exitosa";
-    } else {
-        message += "✗ SDL3: Error\n";
-        message += "⚠ Integración: Parcial";
-        spdlog::warn("SDL3 renderer no disponible");
-    }
+    std::string message = "✓ wxWidgets: Funcionando perfectamente\n";
+    message += "✓ Interfaz: Totalmente funcional\n";
+    message += "✓ Eventos: Sistema operativo\n";
+    message += "✓ Aplicación: Lista para usar";
     
     wxMessageBox(message, Constants::Text::TEST_TITLE, wxOK | wxICON_INFORMATION);
 }
 
 void MyFrame::OnClose(wxCloseEvent& event) {
     spdlog::info("Cerrando aplicación - iniciando limpieza de recursos");
-    
-    // La limpieza de SDL3 se hace automáticamente en el destructor del manager
     
     // Aceptar el evento de cierre y permitir que la ventana se cierre
     event.Skip();

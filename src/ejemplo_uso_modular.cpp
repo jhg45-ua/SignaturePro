@@ -6,35 +6,10 @@
  */
 
 #include "logger.hpp"
-#include "sdl3_manager.hpp"
 #include "constants.hpp"
 #include <iostream>
 #include <string>
 
-// Ejemplo de uso independiente del SDL3Manager
-void ejemplo_sdl3_standalone() {
-    std::cout << "\n=== EJEMPLO: SDL3Manager Independiente ===" << std::endl;
-    
-    // Inicializar logger
-    Logger::Initialize();
-    
-    // Crear manager de SDL3
-    SDL3Manager sdl_manager;
-    
-    // Inicializar SDL3
-    if (sdl_manager.Initialize()) {
-        spdlog::info("SDL3 inicializado exitosamente");
-        
-        // Probar renderizado
-        if (sdl_manager.TestRendering()) {
-            spdlog::info("Prueba de renderizado exitosa");
-        }
-        
-        // El manager se limpia automáticamente al salir del scope
-    } else {
-        spdlog::error("Error al inicializar SDL3: {}", sdl_manager.GetLastError());
-    }
-}
 
 // Ejemplo de uso de constantes centralizadas
 void ejemplo_constantes() {
@@ -69,7 +44,6 @@ int main() {
     // Ejecutar ejemplos
     ejemplo_constantes();
     ejemplo_logging_personalizado();
-    ejemplo_sdl3_standalone();
     
     std::cout << "\n✅ Demostración completada exitosamente!" << std::endl;
     std::cout << "💡 Los componentes modulares pueden ser reutilizados" << std::endl;
