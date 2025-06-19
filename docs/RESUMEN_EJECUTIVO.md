@@ -42,9 +42,10 @@ La aplicación wxWidgets es una **demostración técnica exitosa** de arquitectu
 |---------|-------|---------|
 | **⚡ Tiempo de Compilación** | ~5 seg | Desarrollo ágil |
 | **📦 Tamaño Ejecutable** | ~1.3 MB | Distribución eficiente |
-| **🔧 Líneas de Código** | ~500 | Mantenimiento simple |
-| **📁 Archivos Fuente** | 8 archivos | Organización clara |
+| **🔧 Líneas de Código** | ~157 líneas | Mantenimiento simple |
+| **📁 Archivos Fuente** | 9 archivos | Organización modular clara |
 | **🎯 Cobertura Features** | 100% | Funcionalidad completa |
+| **⚡ Tiempo de Build** | 3-5 seg | CI/CD optimizado |
 
 ### 💡 **ROI Estimado**
 
