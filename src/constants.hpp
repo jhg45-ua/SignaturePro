@@ -10,8 +10,9 @@
 namespace Constants {
     // === IDS DE ELEMENTOS DE LA INTERFAZ ===
     enum MenuIds {
-        ID_Hello = 1  // ID personalizado para el botón/menú "Hola"
-                     // wxID_EXIT y wxID_ABOUT ya están predefinidos en wxWidgets
+        ID_Hello = 1,  // ID personalizado para el botón/menú "Hola"
+        ID_Help = 2    // ID personalizado para el menú "Ayuda"
+                      // wxID_EXIT y wxID_ABOUT ya están predefinidos en wxWidgets
     };
     
     // === CONFIGURACIÓN DE VENTANA ===
@@ -45,6 +46,11 @@ namespace Constants {
             
         static const char* ABOUT_TITLE = "Acerca de wxWidgets App";
         static const char* TEST_TITLE = "Test de Funcionalidad";
+
+        static const char* HELP_MSG = 
+            "Para más información, visita:\n"
+            "https://www.wxwidgets.org/\n\n"
+            "Documentación completa y guías de inicio rápido.";
     }
     
     // === MENSAJES DE STATUS ===

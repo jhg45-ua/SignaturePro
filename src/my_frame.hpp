@@ -26,6 +26,7 @@ class MyFrame : public wxFrame {
         void OnHello(wxCommandEvent& event);    // Maneja el botón "Hola"
         void OnExit(wxCommandEvent& event);     // Maneja el botón "Salir"
         void OnAbout(wxCommandEvent& event);    // Maneja el menú "Acerca de"
+        void OnHelp(wxCommandEvent& event);     // Maneja el menú "Ayuda"
         void OnClose(wxCloseEvent& event);      // Maneja el cierre de la ventana
         
         // === MÉTODOS PRIVADOS DE INICIALIZACIÓN ===

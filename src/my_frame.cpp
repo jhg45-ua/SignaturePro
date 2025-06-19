@@ -22,6 +22,7 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_BUTTON(Constants::ID_Hello, MyFrame::OnHello)
     EVT_BUTTON(wxID_EXIT, MyFrame::OnExit)
     EVT_MENU(wxID_ABOUT, MyFrame::OnAbout)
+    EVT_MENU(Constants::ID_Help, MyFrame::OnHelp)
     EVT_CLOSE(MyFrame::OnClose)
 wxEND_EVENT_TABLE()
 
@@ -73,7 +74,8 @@ void MyFrame::CreateMenuSystem() {
     
     // Crear menú "Ayuda"
     wxMenu* menuHelp = new wxMenu;
-    menuHelp->Append(wxID_ABOUT);
+    menuHelp->Append(wxID_ABOUT, "Acerca de...", "Acerca de la aplicación");
+    menuHelp->Append(Constants::ID_Help, "Ayuda...\tF1", "Mostrar ayuda e información adicional");
     
     // Crear barra de menús y agregar los menús
     wxMenuBar* menuBar = new wxMenuBar;
@@ -132,6 +134,12 @@ void MyFrame::OnExit(wxCommandEvent& event) {
 void MyFrame::OnAbout(wxCommandEvent& event) {
     wxMessageBox(Constants::Text::ABOUT_TEXT,
                  Constants::Text::ABOUT_TITLE,
+                 wxOK | wxICON_INFORMATION);
+}
+
+void MyFrame::OnHelp(wxCommandEvent& event) {
+    wxMessageBox(Constants::Text::HELP_MSG,
+                 "Ayuda",
                  wxOK | wxICON_INFORMATION);
 }
 
