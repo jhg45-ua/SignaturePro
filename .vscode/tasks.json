@@ -37,20 +37,13 @@
 				"cwd": "${workspaceFolder}"
 			},
 			"problemMatcher": ["$gcc"],
-			"detail": "Configurar proyecto CMake con Unix Makefiles",
-			"presentation": {
-				"echo": true,
-				"reveal": "always",
-				"focus": false,
-				"panel": "shared",
-				"showReuseMessage": true,
-				"clear": false
-			}
+			"detail": "Configurar proyecto CMake (elige Debug/Release/etc.)"
 		},
 		{
 			"label": "build",
 			"type": "shell",
-			"command": "./scripts/build.sh",
+			"command": "cmake",
+			"args": ["--build", "build", "--parallel"],
 			"group": {
 				"kind": "build",
 				"isDefault": true
@@ -59,16 +52,7 @@
 				"cwd": "${workspaceFolder}"
 			},
 			"problemMatcher": ["$gcc"],
-			"detail": "Compilar la aplicación wxWidgets (paralelo) con información adicional",
-			"dependsOn": "configure",
-			"presentation": {
-				"echo": true,
-				"reveal": "always",
-				"focus": false,
-				"panel": "shared",
-				"showReuseMessage": true,
-				"clear": false
-			}
+			"detail": "Compilar la aplicación wxWidgets"
 		},
 		{
 			"label": "clean",
@@ -79,89 +63,30 @@
 			"options": {
 				"cwd": "${workspaceFolder}"
 			},
-			"detail": "Limpiar directorio de build",
-			"presentation": {
-				"echo": true,
-				"reveal": "always",
-				"focus": false,
-				"panel": "shared",
-				"showReuseMessage": true,
-				"clear": false
-			}
+			"detail": "Limpiar directorio de build"
 		},
 		{
 			"label": "rebuild",
 			"type": "shell",
 			"dependsOrder": "sequence",
-			"dependsOn": ["clean", "build"],
+			"dependsOn": ["clean", "configure", "build"],
 			"group": "build",
-			"detail": "Limpiar y reconstruir completamente",
-			"presentation": {
-				"echo": true,
-				"reveal": "always",
-				"focus": false,
-				"panel": "shared",
-				"showReuseMessage": true,
-				"clear": false
-			}
+			"detail": "Limpiar y reconstruir completamente"
 		},
 		{
 			"label": "run",
 			"type": "shell",
-			"command": "./scripts/run.sh",
+			"command": "./build/bin/app",
 			"group": "test",
 			"options": {
 				"cwd": "${workspaceFolder}"
 			},
 			"dependsOn": "build",
-			"detail": "Ejecutar la aplicación wxWidgets con verificación",
+			"detail": "Ejecutar la aplicación wxWidgets",
 			"presentation": {
-				"echo": true,
-				"reveal": "always",
 				"focus": true,
 				"panel": "dedicated",
-				"showReuseMessage": false,
 				"clear": true
-			},
-			"isBackground": false
-		},
-		{
-			"label": "run-debug",
-			"type": "shell",
-			"command": "lldb",
-			"args": ["./build/bin/app"],
-			"group": "test",
-			"options": {
-				"cwd": "${workspaceFolder}"
-			},
-			"dependsOn": "build",
-			"detail": "Ejecutar la aplicación en modo debug con LLDB",
-			"presentation": {
-				"echo": true,
-				"reveal": "always",
-				"focus": true,
-				"panel": "dedicated",
-				"showReuseMessage": false,
-				"clear": true
-			}
-		},
-		{
-			"label": "check-dependencies",
-			"type": "shell",
-			"command": "sh",
-			"args": ["-c", "echo '🔍 Verificando dependencias...' && brew list wxwidgets spdlog cmake && echo '✅ make disponible:' && which make"],
-			"group": "build",
-			"options": {
-				"cwd": "${workspaceFolder}"
-			},
-			"detail": "Verificar dependencias instaladas (wxwidgets, spdlog, cmake, make)",
-			"presentation": {
-				"echo": true,
-				"reveal": "always",
-				"focus": false,
-				"panel": "shared",
-				"showReuseMessage": true,
-				"clear": false
 			}
 		},
 		{
@@ -172,13 +97,10 @@
 			"options": {
 				"cwd": "${workspaceFolder}"
 			},
-			"detail": "Mostrar información y estadísticas del proyecto",
+			"detail": "Mostrar información del proyecto",
 			"presentation": {
-				"echo": true,
-				"reveal": "always",
 				"focus": true,
 				"panel": "dedicated",
-				"showReuseMessage": false,
 				"clear": true
 			}
 		}

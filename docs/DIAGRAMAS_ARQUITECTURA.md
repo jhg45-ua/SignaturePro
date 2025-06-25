@@ -110,7 +110,7 @@ sequenceDiagram
     Dialog-->>Frame: Dialog Closed
     Frame->>Logger: info("Prueba completada")
 ```
-     │        ## 🏛️ Arquitectura por Capas
+## 🏛️ Arquitectura por Capas
 
 ```mermaid
 graph TB

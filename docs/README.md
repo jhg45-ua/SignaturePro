@@ -12,7 +12,6 @@ Bienvenido a la documentación completa del proyecto de demostración wxWidgets.
 | [DIAGRAMAS_ARQUITECTURA.md](DIAGRAMAS_ARQUITECTURA.md) | Diagramas UML y de arquitectura del sistema | ✅ Actualizado |
 | [RESUMEN_EJECUTIVO.md](RESUMEN_EJECUTIVO.md) | Análisis ejecutivo y métricas del proyecto | ✅ Actualizado |
 | [PROBLEMAS_RESUELTOS.md](PROBLEMAS_RESUELTOS.md) | Soluciones a problemas de configuración | ✅ Actualizado |
-| [CHANGELOG.md](CHANGELOG.md) | Registro de cambios y evolución del proyecto | ✅ Actualizado |
 
 ### 🗂️ **Documentación por Categorías**
 

@@ -11,18 +11,18 @@
   - ✅ Selección de tipo de build (Debug, Release, RelWithDebInfo, MinSizeRel)
   - ✅ Generación de compile_commands.json para IntelliSense
   - ✅ Variables de entorno optimizadas
-  - ✅ Uso de make tradicional para mayor compatibilidad
+  - ✅ Proceso CMake estándar y portable
 - **Uso**: **Ctrl+Shift+P** → "Tasks: Run Task" → "configure"
 
 #### 2. **build** (Tarea por defecto)
-- **Descripción**: Compila la aplicación wxWidgets
-- **Script**: `./scripts/build.sh`
+- **Descripción**: Compila la aplicación wxWidgets usando CMake
+- **Comando**: `cmake --build build --parallel`
 - **Características**:
   - ✅ Compilación paralela para mayor velocidad
-  - ✅ Información de progreso mejorada
-  - ✅ Verificación de archivos generados
+  - ✅ Usa CMake directamente sin scripts intermedios
+  - ✅ Problem matcher integrado para errores
   - ✅ Depende automáticamente de "configure"
-  - ✅ Script separado para mejor compatibilidad con zsh
+  - ✅ Proceso estándar de la industria
 - **Uso**: **Ctrl+Shift+B** (tarea por defecto) o **Ctrl+Shift+P** → "Tasks: Run Task" → "build"
 
 #### 3. **clean** - Limpiar Build
@@ -38,14 +38,13 @@
 ### 🚀 **Tareas de Ejecución**
 
 #### 1. **run** - Ejecutar Aplicación
-- **Descripción**: Ejecuta la aplicación wxWidgets
-- **Script**: `./scripts/run.sh`
+- **Descripción**: Ejecuta la aplicación wxWidgets directamente
+- **Comando**: `./build/bin/app`
 - **Características**:
-  - ✅ Verificación de existencia del ejecutable
+  - ✅ Ejecución directa del binario
   - ✅ Compilación automática si es necesario
-  - ✅ Mensajes informativos mejorados
   - ✅ Panel dedicado para la ejecución
-  - ✅ Script separado para mejor compatibilidad con zsh
+  - ✅ Proceso simplificado sin scripts
 - **Uso**: **Ctrl+Shift+P** → "Tasks: Run Task" → "run"
 
 #### 2. **run-debug** - Ejecutar en Modo Debug
@@ -57,40 +56,56 @@
 
 #### 1. **check-dependencies** - Verificar Dependencias
 - **Descripción**: Verifica que todas las dependencias estén instaladas
-- **Verifica**: wxwidgets, spdlog, cmake, make
+- **Verifica**: wxwidgets, spdlog, cmake
+- **Comando**: Verifica instalación con Homebrew y versión de CMake
 - **Uso**: **Ctrl+Shift+P** → "Tasks: Run Task" → "check-dependencies"
 
 #### 2. **project-info** - Información del Proyecto
-- **Descripción**: Muestra estadísticas del proyecto
+- **Descripción**: Muestra estadísticas detalladas del proyecto
 - **Script**: `./scripts/project-info.sh`
 - **Información mostrada**:
   - 📁 Número de archivos fuente
   - 📏 Total de líneas de código
   - 🔧 Tamaño del ejecutable
   - ⏱️ Fecha de última compilación
+  - 📊 Análisis de dependencias
 - **Uso**: **Ctrl+Shift+P** → "Tasks: Run Task" → "project-info"
 
-## ⚡ **Flujo de Trabajo Recomendado**
+## ⚡ **Flujo de Trabajo Simplificado**
 
 ### 🔄 **Desarrollo Diario**
-1. **build** (Ctrl+Shift+B) - Compilar cambios
-2. **run** - Probar la aplicación
+1. **build** (Ctrl+Shift+B) - Compilar cambios con CMake
+2. **run** - Ejecutar aplicación directamente
 3. Repetir según sea necesario
 
 ### 🆕 **Configuración Inicial**
 1. **check-dependencies** - Verificar instalación
-2. **configure** - Configurar proyecto
+2. **configure** - Configurar proyecto con CMake
 3. **build** - Compilar por primera vez
 4. **run** - Ejecutar aplicación
 
 ### 🔧 **Problemas de Compilación**
-1. **clean** - Limpiar build
-2. **configure** - Reconfigurar
+1. **clean** - Limpiar directorio build
+2. **configure** - Reconfigurar con CMake
 3. **build** - Compilar desde cero
 
 ### 📊 **Monitoreo**
 - **project-info** - Ver estadísticas del proyecto
 - **check-dependencies** - Verificar dependencias
+
+## 🎯 **Ventajas del Proceso Simplificado**
+
+### 🚀 **Eficiencia**
+- ✅ CMake puro sin capas adicionales
+- ✅ Menos archivos que mantener
+- ✅ Proceso estándar de la industria
+- ✅ Mejor integración con VS Code
+
+### 🔧 **Mantenibilidad**
+- ✅ Un solo punto de configuración (CMakeLists.txt)
+- ✅ Problem matchers integrados
+- ✅ Debugging más directo
+- ✅ Portable entre sistemas
 
 ## 🎯 **Características Avanzadas**
 

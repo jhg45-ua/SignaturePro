@@ -63,8 +63,6 @@ wxWidgets_App/
 │   ├── 🔧 PROBLEMAS_RESUELTOS.md    # Soluciones a problemas comunes
 │   └── 📊 RESUMEN_EJECUTIVO.md      # Resumen para directivos
 ├── 📂 scripts/                      # Scripts de automatización
-│   ├── 🔨 build.sh                  # Script de compilación
-│   ├── 🚀 run.sh                    # Script de ejecución
 │   └── 📊 project-info.sh           # Información del proyecto
 ├── �📂 build/                        # Archivos de construcción CMake
 ├── 📂 .vscode/                      # Configuración VS Code
