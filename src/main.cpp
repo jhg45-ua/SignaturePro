@@ -1,11 +1,11 @@
 /**
- * ARCHIVO PRINCIPAL MODULAR
- * 
- * Este archivo demuestra cómo usar la nueva arquitectura modular.
- * Incluye directamente los headers necesarios sin depender de include.hpp.
+ * ARCHIVO PRINCIPAL DE LA APLICACIÓN
+ * Este archivo contiene la implementación de la aplicación wxWidgets.
+ * Aquí se inicializa la aplicación y se crea la ventana principal.
  */
 
 #include "my_app.hpp"
+#include "my_frame.hpp"
 
-// El punto de entrada de la aplicación está definido en my_app.cpp
-// mediante la macro wxIMPLEMENT_APP(MyApp)
+// Macro de wxWidgets que crea la aplicación principal
+wxIMPLEMENT_APP(MyApp);

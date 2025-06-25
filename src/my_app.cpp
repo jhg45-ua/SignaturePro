@@ -6,9 +6,6 @@
 #include "my_frame.hpp"
 #include "logger.hpp"
 
-// Macro de wxWidgets que crea la aplicación principal
-wxIMPLEMENT_APP(MyApp);
-
 bool MyApp::OnInit() {
     // Inicializar el sistema de logging
     Logger::Initialize();
