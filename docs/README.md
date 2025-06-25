@@ -12,6 +12,8 @@ Bienvenido a la documentación completa del proyecto de demostración wxWidgets.
 | [DIAGRAMAS_ARQUITECTURA.md](DIAGRAMAS_ARQUITECTURA.md) | Diagramas UML y de arquitectura del sistema | ✅ Actualizado |
 | [RESUMEN_EJECUTIVO.md](RESUMEN_EJECUTIVO.md) | Análisis ejecutivo y métricas del proyecto | ✅ Actualizado |
 | [PROBLEMAS_RESUELTOS.md](PROBLEMAS_RESUELTOS.md) | Soluciones a problemas de configuración | ✅ Actualizado |
+| [TEMA_OSCURO_IMPLEMENTADO.md](TEMA_OSCURO_IMPLEMENTADO.md) | Tema oscuro con botones planos modernos | ✅ **NUEVO** |
+| [GUIA_USO_TEMA_OSCURO.md](GUIA_USO_TEMA_OSCURO.md) | Guía rápida para usar el tema en desarrollo | ✅ **NUEVO** |
 
 ### 🗂️ **Documentación por Categorías**
 
@@ -22,10 +24,19 @@ Bienvenido a la documentación completa del proyecto de demostración wxWidgets.
 - **Flujos de Ejecución**: Inicialización, eventos y GUI
 
 #### 💻 **Implementación Técnica**
-- **Componentes Principales**: MyApp, MyFrame, Logger, Constants
+- **Componentes Principales**: MyApp, MyFrame, SecondFrame, ModalDialog, Logger, Constants
+- **Sistema de Tema**: Tema oscuro profesional centralizado con funciones utilitarias
 - **Tecnologías**: wxWidgets 3.2.8+, spdlog 1.15.3+, CMake
+- **Navegación**: Sistema multipágina con ventanas independientes y diálogos modales
 - **Compilación**: Scripts automatizados y configuración CMake
 - **Configuración VS Code**: IntelliSense, debugging y tareas
+
+#### 🎨 **Características de Interfaz**
+- **Tema Oscuro**: Paleta de colores profesional con alto contraste
+- **Navegación Multipágina**: Ventana principal, segunda ventana y diálogos modales
+- **Componentes Estilizados**: Botones, campos de entrada, checkboxes y etiquetas
+- **UX Moderna**: Iconos emoji, espaciado consistente y tipografía legible
+- **Accesibilidad**: Alto contraste y diseño responsivo
 
 #### 📊 **Análisis y Métricas**
 - **Métricas de Calidad**: Rendimiento, robustez y mantenibilidad
@@ -38,7 +49,14 @@ Bienvenido a la documentación completa del proyecto de demostración wxWidgets.
 ### 📋 **Para Desarrolladores Nuevos**
 1. Leer [DOCUMENTACION_COMPLETA.md](DOCUMENTACION_COMPLETA.md) - Visión general técnica
 2. Revisar [DIAGRAMAS_ARQUITECTURA.md](DIAGRAMAS_ARQUITECTURA.md) - Entender la estructura
-3. Ver ejemplos en `src/ejemplo_uso_modular.cpp`
+3. Consultar [GUIA_USO_TEMA_OSCURO.md](GUIA_USO_TEMA_OSCURO.md) - Aprender a usar el sistema de tema
+4. Ver ejemplos en `src/ejemplo_uso_modular.cpp`
+
+### 🎨 **Para Desarrollo de UI**
+1. Leer [TEMA_OSCURO_IMPLEMENTADO.md](TEMA_OSCURO_IMPLEMENTADO.md) - Entender el sistema de tema
+2. Seguir [GUIA_USO_TEMA_OSCURO.md](GUIA_USO_TEMA_OSCURO.md) - Aplicar estilos consistentes
+3. Usar funciones utilitarias de `src/theme.hpp`
+4. Probar navegación entre ventanas: Principal → Segunda → Diálogo Modal
 
 ### 🔧 **Para Configuración**
 1. Seguir instrucciones de compilación en la documentación completa

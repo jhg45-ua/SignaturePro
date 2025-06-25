@@ -280,6 +280,37 @@ El proyecto incluye configuración completa para VS Code con tareas automatizada
 - **Fuentes**: Tipografía optimizada para legibilidad
 - **Espaciado**: Márgenes y padding consistentes siguiendo guidelines de UI
 
+## 🎨 Sistema de Tema Oscuro
+
+La aplicación incluye un **sistema de tema oscuro moderno** con botones planos:
+
+### **Características**
+- ✅ **Paleta oscura profesional**: Fondos oscuros con texto claro
+- ✅ **Botones planos**: Sin fondos rectangulares, solo texto colorido
+- ✅ **Sistema centralizado**: Archivo `theme.hpp` con funciones utilitarias
+- ✅ **Fácil aplicación**: Una línea por componente
+
+### **Uso Básico**
+```cpp
+#include "theme.hpp"
+
+// Aplicar tema a ventana
+Theme::Utils::ApplyPanelStyle(panel);
+
+// Botones modernos
+Theme::Utils::ApplyFlatPrimaryButton(button);
+Theme::Utils::ApplyFlatSuccessButton(button);
+```
+
+### **Funciones Disponibles**
+- `ApplyFlatPrimaryButton()` - Azul para acciones principales
+- `ApplyFlatSuccessButton()` - Verde para confirmaciones
+- `ApplyFlatDangerButton()` - Rojo para cancelar/eliminar
+- `ApplyTitleStyle()` - Para títulos y encabezados
+- `ApplyInputStyleDark()` - Para campos de entrada
+
+**Ver**: [TEMA_OSCURO_IMPLEMENTADO.md](TEMA_OSCURO_IMPLEMENTADO.md) y [GUIA_USO_TEMA_OSCURO.md](GUIA_USO_TEMA_OSCURO.md)
+
 ## 🧪 Testing y Validación
 
 ### ✅ Casos de Prueba

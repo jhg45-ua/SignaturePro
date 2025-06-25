@@ -8,6 +8,9 @@
 #pragma once
 
 #include <wx/wx.h>
+// Declaración adelantada para evitar dependencia circular
+class SecondFrame;
+class ModalDialog;
 
 class MyFrame : public wxFrame {
     public:
@@ -28,6 +31,8 @@ class MyFrame : public wxFrame {
         void OnAbout(wxCommandEvent& event);    // Maneja el menú "Acerca de"
         void OnHelp(wxCommandEvent& event);     // Maneja el menú "Ayuda"
         void OnClose(wxCloseEvent& event);      // Maneja el cierre de la ventana
+        void OnOpenSecondPage(wxCommandEvent& event); // Abre la segunda página
+        void OnOpenModalDialog(wxCommandEvent& event); // Abre el diálogo modal
         
         // === MÉTODOS PRIVADOS DE INICIALIZACIÓN ===
         void InitializeComponents();  // Inicializa los componentes de la UI
@@ -42,7 +47,15 @@ class MyFrame : public wxFrame {
         wxStaticText* title_text_;
         wxStaticText* info_text_;
         wxButton* test_button_;
+        wxButton* second_page_button_;  // Nuevo botón para segunda página
+        wxButton* modal_dialog_button_; // Nuevo botón para diálogo modal
         wxButton* exit_button_;
+        
+        // IDs personalizados
+        enum {
+            ID_OPEN_SECOND_PAGE = 1000,
+            ID_OPEN_MODAL_DIALOG = 1001
+        };
         
         // Macro de wxWidgets para declarar la tabla de eventos
         DECLARE_EVENT_TABLE()

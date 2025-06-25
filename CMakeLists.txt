@@ -41,7 +41,10 @@ if(wxWidgets_FOUND)
         src/main.cpp      # Punto de entrada
         src/my_app.cpp           # Clase aplicación principal
         src/my_frame.cpp         # Clase frame principal
+        src/second_frame.cpp     # Segunda ventana/página
+        src/modal_dialog.cpp     # Diálogo modal
         src/logger.cpp           # Sistema de logging
+        # Nota: theme.hpp es solo headers, no necesita compilación
     )
     
     # === DIRECTORIOS DE INCLUSIÓN ===

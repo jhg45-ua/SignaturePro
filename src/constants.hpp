@@ -17,8 +17,8 @@ namespace Constants {
     
     // === CONFIGURACIÓN DE VENTANA ===
     namespace Window {
-        static const int DEFAULT_WIDTH = 500;
-        static const int DEFAULT_HEIGHT = 400;
+        static const int DEFAULT_WIDTH = 1200;
+        static const int DEFAULT_HEIGHT = 800;
         static const char* TITLE = "wxWidgets App";
     }
     
