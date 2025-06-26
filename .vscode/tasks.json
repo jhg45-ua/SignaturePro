@@ -103,6 +103,52 @@
 				"panel": "dedicated",
 				"clear": true
 			}
+		},
+		{
+			"label": "build-macos-app",
+			"type": "shell",
+			"command": "./scripts/build-macos-app.sh",
+			"group": "build",
+			"options": {
+				"cwd": "${workspaceFolder}"
+			},
+			"detail": "Construir aplicación macOS (.app) en modo Release",
+			"presentation": {
+				"focus": true,
+				"panel": "dedicated",
+				"clear": true
+			}
+		},
+		{
+			"label": "open-macos-app",
+			"type": "shell",
+			"command": "open",
+			"args": ["build/bin/SignaturePro.app"],
+			"group": "test",
+			"options": {
+				"cwd": "${workspaceFolder}"
+			},
+			"detail": "Abrir la aplicación macOS construida",
+			"presentation": {
+				"focus": true,
+				"panel": "dedicated",
+				"clear": true
+			}
+		},
+		{
+			"label": "create-dmg",
+			"type": "shell",
+			"command": "./scripts/create-dmg.sh",
+			"group": "build",
+			"options": {
+				"cwd": "${workspaceFolder}"
+			},
+			"detail": "Crear DMG de distribución para macOS",
+			"presentation": {
+				"focus": true,
+				"panel": "dedicated",
+				"clear": true
+			}
 		}
 	]
 }

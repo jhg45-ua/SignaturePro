@@ -12,8 +12,9 @@ Bienvenido a la documentación completa del proyecto de demostración wxWidgets.
 | [DIAGRAMAS_ARQUITECTURA.md](DIAGRAMAS_ARQUITECTURA.md) | Diagramas UML y de arquitectura del sistema | ✅ Actualizado |
 | [RESUMEN_EJECUTIVO.md](RESUMEN_EJECUTIVO.md) | Análisis ejecutivo y métricas del proyecto | ✅ Actualizado |
 | [PROBLEMAS_RESUELTOS.md](PROBLEMAS_RESUELTOS.md) | Soluciones a problemas de configuración | ✅ Actualizado |
-| [TEMA_OSCURO_IMPLEMENTADO.md](TEMA_OSCURO_IMPLEMENTADO.md) | Tema oscuro con botones planos modernos | ✅ **NUEVO** |
-| [GUIA_USO_TEMA_OSCURO.md](GUIA_USO_TEMA_OSCURO.md) | Guía rápida para usar el tema en desarrollo | ✅ **NUEVO** |
+| [TEMA_OSCURO_IMPLEMENTADO.md](TEMA_OSCURO_IMPLEMENTADO.md) | Tema oscuro con botones planos modernos | ✅ **NUEVA** |
+| [GUIA_USO_TEMA_OSCURO.md](GUIA_USO_TEMA_OSCURO.md) | Guía rápida para usar el tema en desarrollo | ✅ **NUEVA** |
+| [RELEASE_MACOS.md](RELEASE_MACOS.md) | Guía completa de Release para macOS | ✅ **NUEVA** |
 
 ### 🗂️ **Documentación por Categorías**
 
@@ -26,6 +27,7 @@ Bienvenido a la documentación completa del proyecto de demostración wxWidgets.
 #### 💻 **Implementación Técnica**
 - **Componentes Principales**: MyApp, MyFrame, SecondFrame, ModalDialog, Logger, Constants
 - **Sistema de Tema**: Tema oscuro profesional centralizado con funciones utilitarias
+- **Release macOS**: Bundle .app nativo con DMG, icono e Info.plist completo
 - **Tecnologías**: wxWidgets 3.2.8+, spdlog 1.15.3+, CMake
 - **Navegación**: Sistema multipágina con ventanas independientes y diálogos modales
 - **Compilación**: Scripts automatizados y configuración CMake
@@ -63,6 +65,12 @@ Bienvenido a la documentación completa del proyecto de demostración wxWidgets.
 2. Si hay problemas de IntelliSense, consultar [PROBLEMAS_RESUELTOS.md](PROBLEMAS_RESUELTOS.md)
 3. Usar configuración de VS Code incluida en `.vscode/`
 
+### 🍎 **Para Release de macOS**
+1. Leer [RELEASE_MACOS.md](RELEASE_MACOS.md) - Guía completa de distribución
+2. Ejecutar `./scripts/build-macos-app.sh` para construcción automática
+3. Crear DMG con `./scripts/create-dmg.sh` o tarea de VS Code
+4. Distribuir archivo `SignaturePro-0.0.1-Darwin.dmg`
+
 ### 📈 **Para Gestores de Proyecto**
 1. Revisar [RESUMEN_EJECUTIVO.md](RESUMEN_EJECUTIVO.md) - Análisis de valor
 2. Evaluar métricas de calidad y ROI
@@ -99,6 +107,9 @@ src/
 - ✅ Simplificación del proyecto removiendo SDL3
 - ✅ Aplicación pura wxWidgets más ligera
 - ✅ Configuración optimizada de VS Code e IntelliSense
+- ✅ **Release completa para macOS con bundle .app y DMG**
+- ✅ **Icono personalizado y configuración Info.plist**
+- ✅ **Scripts automatizados para construcción y distribución**
 - ✅ Documentación técnica actualizada
 - ✅ Resolución de dependencias innecesarias
 - ✅ Mejor rendimiento y facilidad de mantenimiento
