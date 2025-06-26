@@ -243,8 +243,7 @@ void MyFrame::OnOpenModalDialog(wxCommandEvent& event) {
     } else if (result == wxID_CANCEL) {
         // Usuario canceló o cerró el diálogo
         spdlog::info("Usuario canceló el diálogo modal");
-        wxMessageBox("Configuración cancelada.", "Cancelado", 
-                     wxOK | wxICON_INFORMATION);
+        // wxMessageBox("Configuración cancelada.", "Cancelado", wxOK | wxICON_INFORMATION);
     }
     
     spdlog::info("Diálogo modal cerrado");
