@@ -51,8 +51,17 @@ if [ -d "bin/SignaturePro.app" ]; then
     echo
     if [[ $REPLY =~ ^[Yy]$ ]]; then
         echo -e "${BLUE}📦 Creando DMG...${NC}"
-        cpack
-        echo -e "${GREEN}✅ DMG creado exitosamente${NC}"
+        if cpack; then
+            echo -e "${GREEN}✅ DMG creado exitosamente${NC}"
+            DMG_FILE=$(find . -name "*.dmg" -type f | head -1)
+            if [ -n "$DMG_FILE" ]; then
+                echo -e "   📍 Archivo DMG: $(pwd)/$DMG_FILE"
+                echo -e "   💡 Abrir con: open $DMG_FILE"
+                echo -e "   🎨 Con fondo personalizado y versión 0.0.1"
+            fi
+        else
+            echo -e "${RED}❌ Error al crear DMG${NC}"
+        fi
     fi
     
 else

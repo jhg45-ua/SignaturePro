@@ -72,7 +72,14 @@ cd build
 cpack
 ```
 
-Esto generará un archivo `.dmg` listo para distribución.
+Esto generará un archivo `.dmg` listo para distribución que contiene:
+- **SignaturePro.app**: La aplicación lista para usar
+- **Applications**: Enlace a la carpeta Applications para fácil instalación
+
+### Instalación desde DMG
+1. Abrir el archivo `.dmg`
+2. Arrastrar `SignaturePro.app` a la carpeta `Applications`
+3. La aplicación estará disponible en Launchpad y Applications
 
 ### Tareas Disponibles en VS Code
 - `build-macos-app`: Construye la aplicación completa

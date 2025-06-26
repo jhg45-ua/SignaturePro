@@ -134,6 +134,21 @@
 				"panel": "dedicated",
 				"clear": true
 			}
+		},
+		{
+			"label": "create-dmg",
+			"type": "shell",
+			"command": "./scripts/create-dmg.sh",
+			"group": "build",
+			"options": {
+				"cwd": "${workspaceFolder}"
+			},
+			"detail": "Crear DMG de distribución para macOS",
+			"presentation": {
+				"focus": true,
+				"panel": "dedicated",
+				"clear": true
+			}
 		}
 	]
 }

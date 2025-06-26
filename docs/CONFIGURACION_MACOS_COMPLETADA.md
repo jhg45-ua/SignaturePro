@@ -66,10 +66,10 @@ SignaturePro.app/
 - **Bundle nativo de macOS** (.app)
 - **Info.plist personalizado** con metadatos completos
 - **Icono personalizado** (`signature.icns`) integrado automáticamente
+- **DMG de distribución** con aplicación y enlace a Applications
 - **Construcción automática** en Release
 - **Script de automatización** completo
 - **Tareas de VS Code** integradas
-- **Soporte para DMG** con CPack
 - **Compatibilidad Retina** habilitada
 
 ### 🔄 Diferencias por Tipo de Build

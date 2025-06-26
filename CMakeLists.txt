@@ -83,9 +83,9 @@ if(wxWidgets_FOUND)
             MACOSX_BUNDLE TRUE                             # Crear bundle de macOS (.app)
             MACOSX_BUNDLE_BUNDLE_NAME "SignaturePro"       # Nombre de la aplicación
             MACOSX_BUNDLE_GUI_IDENTIFIER "com.signaturepro.app"  # Identificador único
-            MACOSX_BUNDLE_BUNDLE_VERSION "1.0"             # Versión del bundle
-            MACOSX_BUNDLE_SHORT_VERSION_STRING "1.0"       # Versión corta
-            MACOSX_BUNDLE_LONG_VERSION_STRING "1.0.0"      # Versión completa
+            MACOSX_BUNDLE_BUNDLE_VERSION "0.0.1"           # Versión del bundle
+            MACOSX_BUNDLE_SHORT_VERSION_STRING "0.0.1"     # Versión corta
+            MACOSX_BUNDLE_LONG_VERSION_STRING "0.0.1"      # Versión completa
             MACOSX_BUNDLE_COPYRIGHT "© 2025 SignaturePro"  # Copyright
             MACOSX_BUNDLE_INFO_PLIST "${CMAKE_SOURCE_DIR}/resources/macos/Info.plist"  # Info.plist personalizado
             MACOSX_BUNDLE_ICON_FILE "signature.icns"       # Archivo de icono
@@ -134,15 +134,30 @@ endif()
 if(APPLE)
     set(CPACK_GENERATOR "DragNDrop")                    # Crear archivo DMG
     set(CPACK_PACKAGE_NAME "SignaturePro")             # Nombre del paquete
-    set(CPACK_PACKAGE_VERSION "1.0.0")                 # Versión
+    set(CPACK_PACKAGE_VERSION "0.0.1")                 # Versión
     set(CPACK_PACKAGE_VENDOR "SignaturePro Team")      # Desarrollador
     set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Aplicación de firma digital") # Descripción
-    set(CPACK_DMG_VOLUME_NAME "SignaturePro Installer") # Nombre del volumen DMG
-    set(CPACK_DMG_FORMAT "UDZO")                        # Formato comprimido
+    
+    # Configuración específica del DMG
+    set(CPACK_DMG_VOLUME_NAME "SignaturePro")          # Nombre del volumen DMG
+    set(CPACK_DMG_FORMAT "UDZO")                       # Formato comprimido
+    
+    # Crear enlace simbólico a Applications para facilitar instalación
+    set(CPACK_DMG_DISABLE_APPLICATIONS_SYMLINK OFF)
+    
+    # Configurar qué se instala en el DMG
+    if(CMAKE_BUILD_TYPE STREQUAL "Release")
+        install(TARGETS app
+            BUNDLE DESTINATION .
+            RUNTIME DESTINATION .
+        )
+    endif()
     
     # Incluir CPack para habilitar la creación de paquetes
     include(CPack)
     
     message(STATUS "📦 CPack configurado para crear DMG en macOS")
-    message(STATUS "   Usar: 'cpack' para generar el instalador")
+    message(STATUS "   • DMG mostrará SignaturePro.app y enlace a Applications")
+    message(STATUS "   • Fondo personalizado: ${CMAKE_SOURCE_DIR}/resources/dmg_background.png")
+    message(STATUS "   • Usar: 'cpack' para generar el instalador")
 endif()
