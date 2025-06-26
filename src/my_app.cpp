@@ -1,22 +1,32 @@
 /**
  * IMPLEMENTACIÓN DE LA APLICACIÓN PRINCIPAL
+ * Punto de entrada de la aplicación wxWidgets
  */
 
 #include "my_app.hpp"
-#include "my_frame.hpp"
-#include "logger.hpp"
+#include "controllers/app_controller.hpp"
+
+// Macro de wxWidgets que crea la aplicación principal
+wxIMPLEMENT_APP(MyApp);
+
+MyApp::MyApp() : app_controller_(nullptr) {
+}
+
+MyApp::~MyApp() {
+    // El destructor se encarga de limpiar automáticamente
+}
 
 bool MyApp::OnInit() {
-    // Inicializar el sistema de logging
-    Logger::Initialize();
-    spdlog::info("Iniciando aplicación wxWidgets");
+    // Crear el controlador principal de la aplicación
+    app_controller_ = std::make_unique<AppController>();
     
-    // Crear la ventana principal
-    MyFrame* frame = new MyFrame();
+    // Inicializar el controlador
+    if (!app_controller_->Initialize()) {
+        return false;
+    }
     
-    // Mostrar la ventana (hacer visible)
-    frame->Show(true);
+    // Crear y mostrar la ventana principal
+    app_controller_->CreateMainWindow();
     
-    // Retornar true indica que la inicialización fue exitosa
     return true;
 }

@@ -3,8 +3,8 @@
  */
 
 #include "modal_dialog.hpp"
-#include "theme.hpp"
-#include "logger.hpp"
+#include "../core/theme.hpp"
+#include "../core/logger.hpp"
 
 // Incluir headers necesarios de wxWidgets
 #include <wx/panel.h>

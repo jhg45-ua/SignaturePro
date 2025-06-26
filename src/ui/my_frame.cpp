@@ -5,9 +5,9 @@
 #include "my_frame.hpp"
 #include "second_frame.hpp"  // Incluir el header de la segunda ventana
 #include "modal_dialog.hpp"  // Incluir el header del diálogo modal
-#include "theme.hpp"         // Incluir el sistema de tema
-#include "constants.hpp"
-#include "logger.hpp"
+#include "../core/theme.hpp"         // Incluir el sistema de tema
+#include "../core/constants.hpp"
+#include "../core/logger.hpp"
 
 // Incluir headers necesarios de wxWidgets
 #include <wx/panel.h>

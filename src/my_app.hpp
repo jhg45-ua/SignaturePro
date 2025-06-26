@@ -8,12 +8,22 @@
 #pragma once
 
 #include <wx/wx.h>
+#include <memory>
+
+// Forward declaration
+class AppController;
 
 class MyApp : public wxApp {
-    public:
-        /**
-         * Función que se ejecuta al inicializar la aplicación
-         * @return true si la inicialización fue exitosa
-         */
-        virtual bool OnInit() override;
+public:
+    MyApp();
+    ~MyApp();
+    
+    /**
+     * Función que se ejecuta al inicializar la aplicación
+     * @return true si la inicialización fue exitosa
+     */
+    virtual bool OnInit() override;
+
+private:
+    std::unique_ptr<AppController> app_controller_;
 };

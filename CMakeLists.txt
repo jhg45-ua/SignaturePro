@@ -38,13 +38,22 @@ if(wxWidgets_FOUND)
     
     # Aplicación wxWidgets
     add_executable(app
-        src/main.cpp      # Punto de entrada
-        src/my_app.cpp           # Clase aplicación principal
-        src/my_frame.cpp         # Clase frame principal
-        src/second_frame.cpp     # Segunda ventana/página
-        src/modal_dialog.cpp     # Diálogo modal
-        src/logger.cpp           # Sistema de logging
-        # Nota: theme.hpp es solo headers, no necesita compilación
+        src/my_app.cpp                           # Aplicación principal y punto de entrada
+        
+        # UI Layer
+        src/ui/my_frame.cpp                      # Clase frame principal
+        src/ui/second_frame.cpp                  # Segunda ventana/página
+        src/ui/modal_dialog.cpp                  # Diálogo modal
+        
+        # Controllers Layer
+        src/controllers/app_controller.cpp       # Controlador principal
+        
+        # Services Layer
+        src/services/logging_service.cpp         # Servicio de logging
+        
+        # Core Layer
+        src/core/logger.cpp                      # Sistema de logging base
+        # Nota: theme.hpp y constants.hpp son solo headers
     )
     
     # === DIRECTORIOS DE INCLUSIÓN ===
