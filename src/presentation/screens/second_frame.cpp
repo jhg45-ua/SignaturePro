@@ -3,8 +3,8 @@
  */
 
 #include "second_frame.hpp"
-#include "../core/theme.hpp"
-#include "../core/logger.hpp"
+#include "../../config/theme.hpp"
+#include "../../config/logger.hpp"
 
 // Incluir headers necesarios de wxWidgets
 #include <wx/panel.h>

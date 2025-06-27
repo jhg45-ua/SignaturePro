@@ -3,7 +3,7 @@
  */
 
 #include "logging_service.hpp"
-#include "../core/logger.hpp"
+#include "../config/logger.hpp"
 #include <spdlog/spdlog.h>
 
 LoggingService::LoggingService() : initialized_(false) {

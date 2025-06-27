@@ -3,12 +3,13 @@
  */
 
 #include "app_controller.hpp"
-#include "../ui/my_frame.hpp"
+#include "../presentation/screens/my_frame.hpp"
 #include "../services/logging_service.hpp"
-#include "../core/logger.hpp"
+#include "../config/logger.hpp"
+#include "../presentation/controllers/application_controller.hpp"
 
 AppController::AppController() 
-    : logging_service_(nullptr), main_frame_(nullptr) {
+    : logging_service_(nullptr), main_frame_(nullptr), presentation_controller_(nullptr) {
 }
 
 AppController::~AppController() {
@@ -19,6 +20,12 @@ bool AppController::Initialize() {
     try {
         // Inicializar servicios
         InitializeServices();
+        
+        // Inicializar controlador de presentación (Clean Architecture)
+        presentation_controller_ = std::make_unique<Presentation::Controllers::ApplicationController>();
+        if (!presentation_controller_->Initialize()) {
+            throw std::runtime_error("Error inicializando controlador de presentación");
+        }
         
         // Log de inicialización exitosa
         if (logging_service_) {
@@ -36,10 +43,21 @@ bool AppController::Initialize() {
 
 void AppController::CreateMainWindow() {
     try {
+        // Obtener información de la aplicación desde el dominio
+        std::string windowTitle = "wxWidgets App";
+        if (presentation_controller_) {
+            auto app = presentation_controller_->GetApplication();
+            if (app) {
+                windowTitle = app->GetTitle();
+            }
+        }
+        
         // Crear la ventana principal
         main_frame_ = std::make_unique<MyFrame>();
         
         if (main_frame_) {
+            // Configurar título desde el dominio
+            main_frame_->SetTitle(windowTitle);
             main_frame_->Show(true);
             
             if (logging_service_) {
@@ -56,6 +74,12 @@ void AppController::CreateMainWindow() {
 void AppController::Shutdown() {
     if (logging_service_) {
         logging_service_->LogInfo("Cerrando aplicación...");
+    }
+    
+    // Cerrar controlador de presentación
+    if (presentation_controller_) {
+        presentation_controller_->Shutdown();
+        presentation_controller_.reset();
     }
     
     // Limpiar recursos

@@ -1,13 +1,10 @@
 /**
  * IMPLEMENTACIÓN DE LA APLICACIÓN PRINCIPAL
- * Punto de entrada de la aplicación wxWidgets
+ * Punto de entrada de la aplicación wxWidgets siguiendo Clean Architecture
  */
 
 #include "my_app.hpp"
-#include "controllers/app_controller.hpp"
-
-// Macro de wxWidgets que crea la aplicación principal
-wxIMPLEMENT_APP(MyApp);
+#include "../controllers/app_controller.hpp"
 
 MyApp::MyApp() : app_controller_(nullptr) {
 }

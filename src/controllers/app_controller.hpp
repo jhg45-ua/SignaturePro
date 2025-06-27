@@ -2,7 +2,7 @@
  * APPLICATION CONTROLLER
  * 
  * Controlador principal que maneja la lógica de la aplicación
- * y coordina entre las vistas y servicios.
+ * y coordina entre las vistas y servicios usando Clean Architecture.
  */
 
 #pragma once
@@ -13,6 +13,13 @@
 // Forward declarations
 class MyFrame;
 class LoggingService;
+
+// Clean Architecture components
+namespace Presentation {
+    namespace Controllers {
+        class ApplicationController;
+    }
+}
 
 class AppController {
 public:
@@ -37,6 +44,9 @@ private:
     
     // Vista principal
     std::unique_ptr<MyFrame> main_frame_;
+    
+    // Clean Architecture Controller
+    std::unique_ptr<Presentation::Controllers::ApplicationController> presentation_controller_;
     
     // Métodos privados de inicialización
     void InitializeServices();
