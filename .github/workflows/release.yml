@@ -12,6 +12,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Install dependencies
+        run: brew install spdlog
+
       - name: Build with CMake
         run: |
           mkdir build
