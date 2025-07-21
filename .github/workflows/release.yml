@@ -2,8 +2,8 @@ name: Simple Build and Release
 
 on:
   push:
-    branches:
-      - '**'
+    tags:
+      - 'v*'
 
 jobs:
   build:
