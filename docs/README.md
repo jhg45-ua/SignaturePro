@@ -1,144 +1,130 @@
-# 📚 Documentación del Proyecto wxWidgets
+# SignaturePro - Clean Architecture wxWidgets
 
-Bienvenido a la documentación completa del proyecto de demostración wxWidgets. Esta aplicación muestra las capacidades del framework wxWidgets para crear interfaces gráficas nativas multiplataforma profesionales.
+Una aplicación profesional que implementa **Clean Architecture** con wxWidgets, demostrando las mejores prácticas para desarrollar interfaces gráficas nativas multiplataforma.
 
-## 📋 Índice de Documentación
+## 📚 Documentación Disponible
 
-### 📖 **Documentación Principal**
+| Archivo | Propósito | Audiencia |
+|---------|-----------|-----------|
+| **[📖 Documentación Técnica](DOCUMENTACION_COMPLETA.md)** | Clean Architecture completa y componentes del sistema | Desarrolladores |
+| **[🛠️ Guía de Desarrollo](GUIA_DESARROLLO.md)** | Flujo de desarrollo y mejores prácticas | Desarrolladores activos |
+| **[🔧 Solución de Problemas](SOLUCION_PROBLEMAS.md)** | Problemas comunes y soluciones | Todos |
+| **[🚀 Release macOS](RELEASE_MACOS.md)** | Distribución para macOS (.app y DMG) | DevOps/Release |
+| **[📊 Resumen Ejecutivo](RESUMEN_EJECUTIVO.md)** | Análisis de valor empresarial y Clean Architecture | Gestores/Directivos |
 
-| Archivo | Descripción | Estado |
-|---------|-------------|--------|
-| [DOCUMENTACION_COMPLETA.md](DOCUMENTACION_COMPLETA.md) | Documentación técnica completa de la aplicación | ✅ Actualizado |
-| [DIAGRAMAS_ARQUITECTURA.md](DIAGRAMAS_ARQUITECTURA.md) | Diagramas UML y de arquitectura del sistema | ✅ Actualizado |
-| [RESUMEN_EJECUTIVO.md](RESUMEN_EJECUTIVO.md) | Análisis ejecutivo y métricas del proyecto | ✅ Actualizado |
-| [PROBLEMAS_RESUELTOS.md](PROBLEMAS_RESUELTOS.md) | Soluciones a problemas de configuración | ✅ Actualizado |
-| [TEMA_OSCURO_IMPLEMENTADO.md](TEMA_OSCURO_IMPLEMENTADO.md) | Tema oscuro con botones planos modernos | ✅ **NUEVA** |
-| [GUIA_USO_TEMA_OSCURO.md](GUIA_USO_TEMA_OSCURO.md) | Guía rápida para usar el tema en desarrollo | ✅ **NUEVA** |
-| [RELEASE_MACOS.md](RELEASE_MACOS.md) | Guía completa de Release para macOS | ✅ **NUEVA** |
+## 🏗️ Arquitectura
 
-### 🗂️ **Documentación por Categorías**
+Implementa **Clean Architecture** de Robert C. Martin con separación clara de responsabilidades:
 
-#### 🏗️ **Arquitectura y Diseño**
-- **Arquitectura Modular**: Separación en 4 componentes especializados
-- **Patrones de Diseño**: RAII, MVC, Observer
-- **Diagramas UML**: Clases, secuencia, estados y dependencias
-- **Flujos de Ejecución**: Inicialización, eventos y GUI
+- **🎯 Domain Layer** - Entidades y casos de uso puros
+- **💾 Data Layer** - Repositorios y modelos de datos
+- **🎨 Presentation Layer** - Controladores de coordinación
+- **🖥️ UI Layer** - Interfaz wxWidgets nativa
 
-#### 💻 **Implementación Técnica**
-- **Componentes Principales**: MyApp, MyFrame, SecondFrame, ModalDialog, Logger, Constants
-- **Sistema de Tema**: Tema oscuro profesional centralizado con funciones utilitarias
-- **Release macOS**: Bundle .app nativo con DMG, icono e Info.plist completo
-- **Tecnologías**: wxWidgets 3.2.8+, spdlog 1.15.3+, CMake
-- **Navegación**: Sistema multipágina con ventanas independientes y diálogos modales
-- **Compilación**: Scripts automatizados y configuración CMake
-- **Configuración VS Code**: IntelliSense, debugging y tareas
+## 🚀 Inicio Rápido
 
-#### 🎨 **Características de Interfaz**
-- **Tema Oscuro**: Paleta de colores profesional con alto contraste
-- **Navegación Multipágina**: Ventana principal, segunda ventana y diálogos modales
-- **Componentes Estilizados**: Botones, campos de entrada, checkboxes y etiquetas
-- **UX Moderna**: Iconos emoji, espaciado consistente y tipografía legible
-- **Accesibilidad**: Alto contraste y diseño responsivo
+### Requisitos
+- **wxWidgets 3.2.8+**
+- **CMake 3.16+**
+- **Compilador C++17**
+- **spdlog** (para logging)
 
-#### 📊 **Análisis y Métricas**
-- **Métricas de Calidad**: Rendimiento, robustez y mantenibilidad
-- **Casos de Uso**: Aplicaciones de escritorio multiplataforma
-- **ROI Estimado**: Ahorros en desarrollo y mantenimiento
-- **Roadmap**: Extensiones futuras planificadas
+### Compilación y Ejecución
 
-## 🚀 **Inicio Rápido**
+```bash
+# 1. Configurar proyecto
+cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
 
-### 📋 **Para Desarrolladores Nuevos**
-1. Leer [DOCUMENTACION_COMPLETA.md](DOCUMENTACION_COMPLETA.md) - Visión general técnica
-2. Revisar [DIAGRAMAS_ARQUITECTURA.md](DIAGRAMAS_ARQUITECTURA.md) - Entender la estructura
-3. Consultar [GUIA_USO_TEMA_OSCURO.md](GUIA_USO_TEMA_OSCURO.md) - Aprender a usar el sistema de tema
-4. Ver ejemplos en `src/ejemplo_uso_modular.cpp`
+# 2. Compilar
+cmake --build build --parallel
 
-### 🎨 **Para Desarrollo de UI**
-1. Leer [TEMA_OSCURO_IMPLEMENTADO.md](TEMA_OSCURO_IMPLEMENTADO.md) - Entender el sistema de tema
-2. Seguir [GUIA_USO_TEMA_OSCURO.md](GUIA_USO_TEMA_OSCURO.md) - Aplicar estilos consistentes
-3. Usar funciones utilitarias de `src/theme.hpp`
-4. Probar navegación entre ventanas: Principal → Segunda → Diálogo Modal
+# 3. Ejecutar
+./build/bin/app
+```
 
-### 🔧 **Para Configuración**
-1. Seguir instrucciones de compilación en la documentación completa
-2. Si hay problemas de IntelliSense, consultar [PROBLEMAS_RESUELTOS.md](PROBLEMAS_RESUELTOS.md)
-3. Usar configuración de VS Code incluida en `.vscode/`
+### Usando VS Code
+El proyecto incluye tareas predefinidas:
+- `configure` - Configurar el proyecto CMake
+- `build` - Compilar la aplicación
+- `run` - Ejecutar la aplicación
+- `build-macos-app` - Crear aplicación macOS (.app)
 
-### 🍎 **Para Release de macOS**
-1. Leer [RELEASE_MACOS.md](RELEASE_MACOS.md) - Guía completa de distribución
-2. Ejecutar `./scripts/build-macos-app.sh` para construcción automática
-3. Crear DMG con `./scripts/create-dmg.sh` o tarea de VS Code
-4. Distribuir archivo `SignaturePro-0.0.1-Darwin.dmg`
+## 📁 Estructura Clean Architecture
 
-### 📈 **Para Gestores de Proyecto**
-1. Revisar [RESUMEN_EJECUTIVO.md](RESUMEN_EJECUTIVO.md) - Análisis de valor
-2. Evaluar métricas de calidad y ROI
-3. Considerar roadmap para extensiones futuras
-4. Consultar [CHANGELOG.md](CHANGELOG.md) - Evolución del proyecto
-
-## 🎯 **Información del Proyecto**
-
-### 📊 **Especificaciones Técnicas**
-- **Lenguaje**: C++17
-- **Líneas de código**: ~500 líneas organizadas modularmente
-- **Archivos fuente**: 8 archivos especializados
-- **Tiempo de compilación**: ~5 segundos
-- **Plataforma principal**: macOS (extensible a multiplataforma)
-
-### 🏗️ **Arquitectura Modular**
 ```
 src/
-├── 🏠 Aplicación/          # MyApp, MyFrame, main.cpp
-├── 🔧 Componentes/         # Logger
-├── ⚙️ Configuración/       # Constants
+├── main.cpp                         # Punto de entrada
+├── domain/                         # 🎯 DOMAIN LAYER
+│   ├── entities/                   # Entidades de negocio
+│   ├── repositories/               # Interfaces de repositorios
+│   └── usecases/                   # Casos de uso
+├── data/                          # 💾 DATA LAYER
+│   ├── models/                    # Modelos de datos (DTOs)
+│   └── repositories/              # Implementaciones
+├── presentation/                  # 🎨 PRESENTATION LAYER
+│   ├── my_app.hpp/cpp            # Aplicación principal
+│   └── controllers/              # Controladores de presentación
+├── ui/                           # 🖥️ UI LAYER
+│   ├── my_frame.hpp/cpp          # Ventana principal
+│   ├── second_frame.hpp/cpp      # Segunda ventana
+│   └── modal_dialog.hpp/cpp      # Diálogo modal
+├── controllers/                  # 🔗 BRIDGE CONTROLLERS
+├── services/                     # 🔧 SERVICES
+└── core/                        # ⚙️ CORE UTILITIES
 ```
 
-### ✅ **Estado del Proyecto**
-- ✅ **Arquitectura**: Completamente modular y funcional
-- ✅ **Documentación**: Completa y actualizada
-- ✅ **Configuración**: VS Code configurado correctamente
-- ✅ **Compilación**: Scripts automatizados funcionando
-- ✅ **Calidad**: Código limpio con patrones profesionales
+## ✨ Características
 
-## 🔄 **Historial de Cambios Recientes**
+- **🏛️ Clean Architecture** - Separación de capas y responsabilidades claras
+- **🎨 Tema Oscuro Moderno** - Interfaz profesional con colores consistentes
+- **🪟 Navegación Multi-ventana** - Ventana principal, segunda ventana y diálogos
+- **📊 Sistema de Logging** - Logging robusto con spdlog
+- **🏗️ Arquitectura Modular** - Código organizado y mantenible
+- **📱 Interfaz Nativa** - Componentes nativos del sistema operativo
+- **🛠️ Build Automatizado** - Scripts para CMake y distribución macOS
 
-### ✨ **Última Actualización (Junio 2025)**
-- ✅ Simplificación del proyecto removiendo SDL3
-- ✅ Aplicación pura wxWidgets más ligera
-- ✅ Configuración optimizada de VS Code e IntelliSense
-- ✅ **Release completa para macOS con bundle .app y DMG**
-- ✅ **Icono personalizado y configuración Info.plist**
-- ✅ **Scripts automatizados para construcción y distribución**
-- ✅ Documentación técnica actualizada
-- ✅ Resolución de dependencias innecesarias
-- ✅ Mejor rendimiento y facilidad de mantenimiento
+## 📖 Documentación
 
-### 🎯 **Próximos Pasos**
-1. **DialogManager**: Sistema de diálogos avanzados
-2. **ConfigManager**: Manejo de configuraciones
-3. **ThemeManager**: Sistema de temas visuales
-4. **PluginManager**: Arquitectura de plugins
-5. **TestFramework**: Suite de pruebas automáticas
+### 📚 Archivos Principales
 
-## 📞 **Soporte y Contribución**
+| Archivo | Propósito | Audiencia |
+|---------|-----------|-----------|
+| **[📖 Documentación Técnica](DOCUMENTACION_COMPLETA.md)** | Clean Architecture y componentes del sistema | Desarrolladores |
+| **[🏗️ Clean Architecture Implementación](CLEAN_ARCHITECTURE_IMPLEMENTATION.md)** | Guía detallada de la arquitectura aplicada | Arquitectos/Desarrolladores Senior |
+| **[� Diagramas Clean Architecture](CLEAN_ARCHITECTURE_DIAGRAMS.md)** | Diagramas visuales de la arquitectura | Todos los niveles técnicos |
+| **[�🛠️ Guía de Desarrollo](GUIA_DESARROLLO.md)** | Flujo de desarrollo y mejores prácticas | Desarrolladores activos |
+| **[🔧 Solución de Problemas](SOLUCION_PROBLEMAS.md)** | Problemas comunes y soluciones | Todos |
+| **[🚀 Release macOS](RELEASE_MACOS.md)** | Distribución para macOS (.app y DMG) | DevOps/Release |
+| **[📊 Resumen Ejecutivo](RESUMEN_EJECUTIVO.md)** | Análisis de valor empresarial y Clean Architecture | Gestores/Directivos |
 
-### 🐛 **Reporte de Problemas**
-- Consultar primero [PROBLEMAS_RESUELTOS.md](PROBLEMAS_RESUELTOS.md)
-- Verificar configuración de VS Code en `.vscode/`
-- Revisar logs de compilación para errores específicos
+### 🗺️ Flujo de Lectura Recomendado
 
-### 🤝 **Contribución**
-- Seguir la arquitectura modular establecida
-- Documentar nuevos componentes siguiendo el formato existente
-- Actualizar diagramas UML cuando sea necesario
-- Mantener la documentación sincronizada
+**Para Nuevos Desarrolladores:**
+1. **README.md** (este archivo) - Configuración inicial y conceptos básicos
+2. **[DOCUMENTACION_COMPLETA.md](DOCUMENTACION_COMPLETA.md)** - Arquitectura completa y implementación
+3. **[GUIA_DESARROLLO.md](GUIA_DESARROLLO.md)** - Flujo de trabajo y herramientas
 
-### 📧 **Contacto**
-- **Proyecto**: Aplicación wxWidgets
-- **Arquitectura**: Modular y escalable
-- **Licencia**: Ver archivo de licencia del proyecto
+**Para Arquitectos/Líderes Técnicos:**
+1. **[DOCUMENTACION_COMPLETA.md](DOCUMENTACION_COMPLETA.md)** - Visión arquitectónica completa
+2. **[RESUMEN_EJECUTIVO.md](RESUMEN_EJECUTIVO.md)** - Valor empresarial
 
----
+**Para Solucionar Problemas:**
+- **[SOLUCION_PROBLEMAS.md](SOLUCION_PROBLEMAS.md)** - Primera parada para errores
 
-**🎯 Documentación mantenida actualizada - Junio 2025**
+**Para Distribución:**
+- **[RELEASE_MACOS.md](RELEASE_MACOS.md)** - Creación de releases y DMG
+
+**Para Gestión:**
+- **[RESUMEN_EJECUTIVO.md](RESUMEN_EJECUTIVO.md)** - Valor técnico, ROI y arquitectura empresarial
+
+## 🤝 Contribuir
+
+1. Fork del repositorio
+2. Crear rama feature (`git checkout -b feature/nueva-caracteristica`)
+3. Commit cambios (`git commit -am 'Add nueva característica'`)
+4. Push a la rama (`git push origin feature/nueva-caracteristica`)
+5. Crear Pull Request
+
+## 📄 Licencia
+
+Este proyecto está bajo la licencia [Apache 2.0](../LICENSE).

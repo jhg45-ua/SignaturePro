@@ -1,0 +1,40 @@
+name: Simple Build and Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: brew install spdlog
+
+      - name: Build with CMake
+        run: |
+          mkdir build
+          cd build
+          cmake ..
+          make
+
+      - name: Build macOS app bundle
+        run: |
+          chmod +x scripts/build-macos-app.sh
+          ./scripts/build-macos-app.sh
+
+      - name: Create DMG
+        run: |
+          chmod +x scripts/create-dmg.sh
+          ./scripts/create-dmg.sh
+
+      - name: Upload DMG to Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: releases/*.dmg
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
