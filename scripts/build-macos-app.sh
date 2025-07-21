@@ -46,24 +46,6 @@ if [ -d "bin/SignaturePro.app" ]; then
     echo -e "${BLUE}📋 Información del bundle:${NC}"
     ls -la bin/SignaturePro.app/Contents/
     
-    # Intentar crear DMG si se solicita
-    read -p "¿Crear archivo DMG para distribución? (y/N): " -n 1 -r
-    echo
-    if [[ $REPLY =~ ^[Yy]$ ]]; then
-        echo -e "${BLUE}📦 Creando DMG...${NC}"
-        if cpack; then
-            echo -e "${GREEN}✅ DMG creado exitosamente${NC}"
-            DMG_FILE=$(find . -name "*.dmg" -type f | head -1)
-            if [ -n "$DMG_FILE" ]; then
-                echo -e "   📍 Archivo DMG: $(pwd)/$DMG_FILE"
-                echo -e "   💡 Abrir con: open $DMG_FILE"
-                echo -e "   🎨 Con fondo personalizado y versión 0.0.1"
-            fi
-        else
-            echo -e "${RED}❌ Error al crear DMG${NC}"
-        fi
-    fi
-    
 else
     echo -e "${RED}❌ Error: No se pudo crear SignaturePro.app${NC}"
     exit 1
@@ -73,3 +55,5 @@ echo ""
 echo -e "${GREEN}🎉 Proceso completado${NC}"
 echo -e "   • Para ejecutar: open bin/SignaturePro.app"
 echo -e "   • Para crear DMG manualmente: cpack"
+
+exit 0
