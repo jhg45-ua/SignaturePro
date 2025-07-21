@@ -2,8 +2,8 @@ name: Simple Build and Release
 
 on:
   push:
-    tags:
-      - 'v*'
+    branches:
+      - '**'
 
 jobs:
   build:
@@ -14,6 +14,9 @@ jobs:
 
       - name: Install dependencies
         run: brew install spdlog
+
+      - name: Install wxWidgets
+        run: brew install wxwidgets
 
       - name: Build with CMake
         run: |
