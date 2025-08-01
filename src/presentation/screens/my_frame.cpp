@@ -151,7 +151,7 @@ void MyFrame::ConfigureLayout() {
 // === MANEJADORES DE EVENTOS ===
 
 void MyFrame::OnExit(wxCommandEvent& event) {
-    spdlog::info("Usuario solicitó cerrar la aplicación");
+    spdlog::info("El usuario solicitó cerrar la aplicación");
     Close(true);
 }
 
