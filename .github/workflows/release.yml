@@ -21,7 +21,26 @@ jobs:
         run: |
           cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
           cmake --build build --parallel
+
+      - name: Sign and prepare app
+        run: |
+          # Firmar la aplicación
           codesign --force --deep --sign - build/bin/SignaturePro.app
+          
+          # Remover atributos de cuarentena que puedan interferir
+          xattr -cr build/bin/SignaturePro.app
+          
+          # Verificar que la firma fue exitosa
+          codesign --verify build/bin/SignaturePro.app
+          
+          # Crear un script de instalación
+          cat > build/install.sh << 'EOF'
+          #!/bin/bash
+          echo "Installing SignaturePro..."
+          sudo xattr -r -d com.apple.quarantine "/Applications/SignaturePro.app" 2>/dev/null || true
+          echo "Installation complete. You can now run SignaturePro from Applications."
+          EOF
+          chmod +x build/install.sh
 
       - name: Create DMG
         run: |
@@ -31,8 +50,17 @@ jobs:
       - name: Release
         uses: softprops/action-gh-release@v2
         with:
-          files: build/*.dmg
+          files: |
+            build/*.dmg
+            build/install.sh
           body: |
-            **Installation**: Right-click app → Open → Open (to bypass macOS security warning)
+            ## SignaturePro v${{ github.ref_name }}
+            
+            **Quick Fix for "damaged" error:**
+            1. Download and mount the DMG
+            2. Drag SignaturePro.app to Applications
+            3. Download and run `install.sh` script, OR
+            4. Run in Terminal: `sudo xattr -r -d com.apple.quarantine "/Applications/SignaturePro.app"`
+            5. Right-click app → Open → Open
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
