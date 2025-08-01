@@ -62,23 +62,32 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: signaturepro-app
-          path: ./
+          path: ./app
+
+      - name: List downloaded files
+        run: |
+          echo "Contents of current directory:"
+          ls -la
+          echo "Contents of app directory:"
+          ls -la app/
+          find . -name "*.app" -type d
 
       - name: Sign application
         run: |
           # Apply ad-hoc signature
-          codesign --force --deep --sign - SignaturePro.app
+          codesign --force --deep --sign - app/SignaturePro.app
           
           # Remove quarantine attributes
-          xattr -cr SignaturePro.app
+          xattr -cr app/SignaturePro.app
           
           # Verify signature
-          codesign --verify --verbose SignaturePro.app
+          codesign --verify --verbose app/SignaturePro.app
 
       - name: Create app archive
         run: |
           # Create a clean zip of the signed app
-          zip -r SignaturePro-${{ needs.setup.outputs.version }}.zip SignaturePro.app
+          cd app
+          zip -r ../SignaturePro-${{ needs.setup.outputs.version }}.zip SignaturePro.app
 
       - name: Upload signed artifact
         uses: actions/upload-artifact@v4
@@ -96,7 +105,12 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: signaturepro-signed
-          path: ./
+          path: ./release
+
+      - name: List release files
+        run: |
+          echo "Contents of release directory:"
+          ls -la release/
 
       - name: Create installation script
         run: |
@@ -128,7 +142,7 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: |
-            SignaturePro-${{ needs.setup.outputs.version }}.zip
+            release/SignaturePro-${{ needs.setup.outputs.version }}.zip
             install-signaturepro.sh
           name: SignaturePro ${{ needs.setup.outputs.version }}
           body: |
