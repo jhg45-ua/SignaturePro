@@ -98,6 +98,11 @@ jobs:
           
           echo "Creating nightly package: $NIGHTLY_VERSION"
           
+          # Store version for later steps
+          echo "NIGHTLY_VERSION=${NIGHTLY_VERSION}" >> $GITHUB_ENV
+          echo "TIMESTAMP=${TIMESTAMP}" >> $GITHUB_ENV
+          echo "SHORT_SHA=${SHORT_SHA}" >> $GITHUB_ENV
+          
           # Create ZIP
           cd build/bin
           zip -r ../../SignaturePro-${NIGHTLY_VERSION}.zip SignaturePro.app
@@ -157,13 +162,14 @@ jobs:
 
       - name: Create nightly release
         run: |
-          TIMESTAMP=$(date +%Y%m%d-%H%M%S)
-          SHORT_SHA=${GITHUB_SHA::7}
-          NIGHTLY_VERSION="nightly-${TIMESTAMP}-${SHORT_SHA}"
-          
           # Create and push nightly tag
           git tag nightly
           git push origin nightly
+          
+          # List files to verify they exist
+          echo "Files to upload:"
+          ls -la SignaturePro-${NIGHTLY_VERSION}.zip
+          ls -la install-signaturepro-nightly.sh
           
           # Create nightly release
           gh release create nightly \
@@ -175,7 +181,7 @@ jobs:
           **Build Info:**
           - Commit: ${GITHUB_SHA}
           - Branch: main
-          - Build Type: Debug
+          - Build Type: Release
           - Timestamp: ${TIMESTAMP}
           
           **Installation:**
@@ -184,8 +190,8 @@ jobs:
           
           **⚠️ Warning:** This is a development build and may contain bugs, incomplete features, or break existing functionality." \
             --prerelease \
-            SignaturePro-${NIGHTLY_VERSION}.zip \
-            install-signaturepro-nightly.sh
+            "SignaturePro-${NIGHTLY_VERSION}.zip" \
+            "install-signaturepro-nightly.sh"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
