@@ -50,7 +50,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: signaturepro-app
-          path: build/bin/SignaturePro.app
+          path: build/bin/
           retention-days: 1
 
   sign:
@@ -62,32 +62,32 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: signaturepro-app
-          path: ./app
+          path: ./
 
       - name: List downloaded files
         run: |
           echo "Contents of current directory:"
           ls -la
-          echo "Contents of app directory:"
-          ls -la app/
-          find . -name "*.app" -type d
+          echo "Looking for SignaturePro.app:"
+          find . -name "SignaturePro.app" -type d
+          echo "Contents of SignaturePro.app if exists:"
+          ls -la SignaturePro.app/ 2>/dev/null || echo "SignaturePro.app not found"
 
       - name: Sign application
         run: |
           # Apply ad-hoc signature
-          codesign --force --deep --sign - app/SignaturePro.app
+          codesign --force --deep --sign - SignaturePro.app
           
           # Remove quarantine attributes
-          xattr -cr app/SignaturePro.app
+          xattr -cr SignaturePro.app
           
           # Verify signature
-          codesign --verify --verbose app/SignaturePro.app
+          codesign --verify --verbose SignaturePro.app
 
       - name: Create app archive
         run: |
           # Create a clean zip of the signed app
-          cd app
-          zip -r ../SignaturePro-${{ needs.setup.outputs.version }}.zip SignaturePro.app
+          zip -r SignaturePro-${{ needs.setup.outputs.version }}.zip SignaturePro.app
 
       - name: Upload signed artifact
         uses: actions/upload-artifact@v4
@@ -105,12 +105,12 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: signaturepro-signed
-          path: ./release
+          path: ./
 
       - name: List release files
         run: |
-          echo "Contents of release directory:"
-          ls -la release/
+          echo "Contents of current directory:"
+          ls -la
 
       - name: Create installation script
         run: |
@@ -142,7 +142,7 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: |
-            release/SignaturePro-${{ needs.setup.outputs.version }}.zip
+            SignaturePro-${{ needs.setup.outputs.version }}.zip
             install-signaturepro.sh
           name: SignaturePro ${{ needs.setup.outputs.version }}
           body: |
