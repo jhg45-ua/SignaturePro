@@ -149,6 +149,54 @@
 				"panel": "dedicated",
 				"clear": true
 			}
+		},
+		{
+			"label": "sign-adhoc",
+			"type": "shell",
+			"command": "./scripts/sign-and-notarize.sh",
+			"args": ["adhoc"],
+			"group": "build",
+			"options": {
+				"cwd": "${workspaceFolder}"
+			},
+			"detail": "Firmar aplicación con firma ad-hoc (desarrollo)",
+			"presentation": {
+				"focus": true,
+				"panel": "dedicated",
+				"clear": true
+			}
+		},
+		{
+			"label": "sign-developer",
+			"type": "shell",
+			"command": "./scripts/sign-and-notarize.sh",
+			"args": ["developer"],
+			"group": "build",
+			"options": {
+				"cwd": "${workspaceFolder}"
+			},
+			"detail": "Firmar aplicación con Developer ID (requiere certificado)",
+			"presentation": {
+				"focus": true,
+				"panel": "dedicated",
+				"clear": true
+			}
+		},
+		{
+			"label": "verify-signature",
+			"type": "shell",
+			"command": "codesign",
+			"args": ["--verify", "--verbose", "build/bin/SignaturePro.app"],
+			"group": "test",
+			"options": {
+				"cwd": "${workspaceFolder}"
+			},
+			"detail": "Verificar firma de la aplicación",
+			"presentation": {
+				"focus": true,
+				"panel": "dedicated",
+				"clear": true
+			}
 		}
 	]
 }
