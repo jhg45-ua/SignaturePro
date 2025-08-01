@@ -9,20 +9,9 @@ on:
       - 'v*'
 
 jobs:
-  setup:
-    name: Setup Environment
+  build-and-release:
+    name: Build and Release
     runs-on: macos-latest
-    outputs:
-      version: ${{ steps.version.outputs.version }}
-    steps:
-      - name: Extract version
-        id: version
-        run: echo "version=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
-
-  build:
-    name: Build Application
-    runs-on: macos-latest
-    needs: setup
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -32,92 +21,64 @@ jobs:
           brew update
           brew install spdlog wxwidgets
 
-      - name: Configure CMake
-        run: |
-          cmake -S . -B build \
-            -DCMAKE_BUILD_TYPE=Release \
-            -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
-
       - name: Build application
-        run: cmake --build build --parallel --config Release
-
-      - name: Verify build output
         run: |
+          cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+          cmake --build build --parallel --config Release
+
+      - name: Verify and prepare app
+        run: |
+          echo "Checking build output:"
           ls -la build/bin/
-          file build/bin/SignaturePro.app/Contents/MacOS/SignaturePro
-
-      - name: Upload build artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: signaturepro-app
-          path: build/bin/
-          retention-days: 1
-
-  sign:
-    name: Sign Application
-    runs-on: macos-latest
-    needs: build
-    steps:
-      - name: Download build artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: signaturepro-app
-          path: ./
-
-      - name: List downloaded files
-        run: |
-          echo "Contents of current directory:"
-          ls -la
-          echo "Looking for SignaturePro.app:"
-          find . -name "SignaturePro.app" -type d
-          echo "Contents of SignaturePro.app if exists:"
-          ls -la SignaturePro.app/ 2>/dev/null || echo "SignaturePro.app not found"
-
-      - name: Sign application
-        run: |
-          # Apply ad-hoc signature
-          codesign --force --deep --sign - SignaturePro.app
+          
+          # Verify the app bundle exists
+          if [ ! -d "build/bin/SignaturePro.app" ]; then
+            echo "Error: SignaturePro.app not found!"
+            exit 1
+          fi
+          
+          echo "App bundle contents:"
+          ls -la build/bin/SignaturePro.app/
+          
+          # Sign the application
+          codesign --force --deep --sign - build/bin/SignaturePro.app
           
           # Remove quarantine attributes
-          xattr -cr SignaturePro.app
+          xattr -cr build/bin/SignaturePro.app
           
           # Verify signature
-          codesign --verify --verbose SignaturePro.app
+          codesign --verify --verbose build/bin/SignaturePro.app
 
-      - name: Create app archive
+      - name: Create release package
         run: |
-          # Create a clean zip of the signed app
-          zip -r SignaturePro-${{ needs.setup.outputs.version }}.zip SignaturePro.app
-
-      - name: Upload signed artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: signaturepro-signed
-          path: SignaturePro-${{ needs.setup.outputs.version }}.zip
-          retention-days: 1
-
-  release:
-    name: Create Release
-    runs-on: macos-latest
-    needs: [setup, sign]
-    steps:
-      - name: Download signed artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: signaturepro-signed
-          path: ./
-
-      - name: List release files
-        run: |
-          echo "Contents of current directory:"
-          ls -la
-
-      - name: Create installation script
-        run: |
+          # Extract version from tag
+          VERSION=${GITHUB_REF#refs/tags/}
+          echo "Creating package for version: $VERSION"
+          
+          # Create ZIP
+          cd build/bin
+          zip -r ../../SignaturePro-${VERSION}.zip SignaturePro.app
+          cd ../..
+          
+          # Verify ZIP was created
+          ls -la SignaturePro-${VERSION}.zip
+          
+          # Create installation script
           cat > install-signaturepro.sh << 'EOF'
           #!/bin/bash
           echo "SignaturePro Installer"
           echo "====================="
+          
+          # Get the ZIP file name
+          ZIP_FILE=$(ls SignaturePro-*.zip 2>/dev/null | head -1)
+          
+          if [ -z "$ZIP_FILE" ]; then
+            echo "Error: No SignaturePro ZIP file found in current directory"
+            echo "Please download the SignaturePro-*.zip file first"
+            exit 1
+          fi
+          
+          echo "Found: $ZIP_FILE"
           
           # Check if app exists in Applications
           if [ -d "/Applications/SignaturePro.app" ]; then
@@ -127,7 +88,7 @@ jobs:
           
           # Extract and install
           echo "Installing SignaturePro..."
-          unzip -q SignaturePro-*.zip
+          unzip -q "$ZIP_FILE"
           sudo mv SignaturePro.app /Applications/
           
           # Remove quarantine
@@ -142,21 +103,22 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: |
-            SignaturePro-${{ needs.setup.outputs.version }}.zip
+            SignaturePro-*.zip
             install-signaturepro.sh
-          name: SignaturePro ${{ needs.setup.outputs.version }}
+          name: SignaturePro ${{ github.ref_name }}
           body: |
-            ## SignaturePro ${{ needs.setup.outputs.version }}
+            ## SignaturePro ${{ github.ref_name }}
             
             ### Installation Options:
             
             **Option 1 - Automatic (Recommended):**
-            1. Download `install-signaturepro.sh`
-            2. Run: `chmod +x install-signaturepro.sh && ./install-signaturepro.sh`
+            1. Download both files: `SignaturePro-${{ github.ref_name }}.zip` and `install-signaturepro.sh`
+            2. Put them in the same folder
+            3. Run: `chmod +x install-signaturepro.sh && ./install-signaturepro.sh`
             
             **Option 2 - Manual:**
-            1. Download `SignaturePro-${{ needs.setup.outputs.version }}.zip`
-            2. Extract and drag to Applications folder
+            1. Download `SignaturePro-${{ github.ref_name }}.zip`
+            2. Extract and drag SignaturePro.app to Applications folder
             3. Run: `sudo xattr -r -d com.apple.quarantine "/Applications/SignaturePro.app"`
             4. Right-click app → Open → Open
             
