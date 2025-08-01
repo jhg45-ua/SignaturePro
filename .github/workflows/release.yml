@@ -1,4 +1,4 @@
-name: Release
+name: Release SignaturePro
 
 permissions:
   contents: write
@@ -9,58 +9,147 @@ on:
       - 'v*'
 
 jobs:
-  build:
+  setup:
+    name: Setup Environment
     runs-on: macos-latest
+    outputs:
+      version: ${{ steps.version.outputs.version }}
     steps:
-      - uses: actions/checkout@v4
+      - name: Extract version
+        id: version
+        run: echo "version=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
 
-      - name: Install dependencies
-        run: brew install spdlog wxwidgets
+  build:
+    name: Build Application
+    runs-on: macos-latest
+    needs: setup
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-      - name: Build app
+      - name: Setup dependencies
         run: |
-          cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
-          cmake --build build --parallel
+          brew update
+          brew install spdlog wxwidgets
 
-      - name: Sign and prepare app
+      - name: Configure CMake
         run: |
-          # Firmar la aplicación
-          codesign --force --deep --sign - build/bin/SignaturePro.app
+          cmake -S . -B build \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+
+      - name: Build application
+        run: cmake --build build --parallel --config Release
+
+      - name: Verify build output
+        run: |
+          ls -la build/bin/
+          file build/bin/SignaturePro.app/Contents/MacOS/SignaturePro
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: signaturepro-app
+          path: build/bin/SignaturePro.app
+          retention-days: 1
+
+  sign:
+    name: Sign Application
+    runs-on: macos-latest
+    needs: build
+    steps:
+      - name: Download build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: signaturepro-app
+          path: ./
+
+      - name: Sign application
+        run: |
+          # Apply ad-hoc signature
+          codesign --force --deep --sign - SignaturePro.app
           
-          # Remover atributos de cuarentena que puedan interferir
-          xattr -cr build/bin/SignaturePro.app
+          # Remove quarantine attributes
+          xattr -cr SignaturePro.app
           
-          # Verificar que la firma fue exitosa
-          codesign --verify build/bin/SignaturePro.app
-          
-          # Crear un script de instalación
-          cat > build/install.sh << 'EOF'
+          # Verify signature
+          codesign --verify --verbose SignaturePro.app
+
+      - name: Create app archive
+        run: |
+          # Create a clean zip of the signed app
+          zip -r SignaturePro-${{ needs.setup.outputs.version }}.zip SignaturePro.app
+
+      - name: Upload signed artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: signaturepro-signed
+          path: SignaturePro-${{ needs.setup.outputs.version }}.zip
+          retention-days: 1
+
+  release:
+    name: Create Release
+    runs-on: macos-latest
+    needs: [setup, sign]
+    steps:
+      - name: Download signed artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: signaturepro-signed
+          path: ./
+
+      - name: Create installation script
+        run: |
+          cat > install-signaturepro.sh << 'EOF'
           #!/bin/bash
+          echo "SignaturePro Installer"
+          echo "====================="
+          
+          # Check if app exists in Applications
+          if [ -d "/Applications/SignaturePro.app" ]; then
+              echo "Removing existing installation..."
+              sudo rm -rf "/Applications/SignaturePro.app"
+          fi
+          
+          # Extract and install
           echo "Installing SignaturePro..."
+          unzip -q SignaturePro-*.zip
+          sudo mv SignaturePro.app /Applications/
+          
+          # Remove quarantine
           sudo xattr -r -d com.apple.quarantine "/Applications/SignaturePro.app" 2>/dev/null || true
-          echo "Installation complete. You can now run SignaturePro from Applications."
+          
+          echo "Installation complete!"
+          echo "You can now run SignaturePro from Applications folder."
           EOF
-          chmod +x build/install.sh
+          chmod +x install-signaturepro.sh
 
-      - name: Create DMG
-        run: |
-          cd build
-          cpack
-
-      - name: Release
+      - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
           files: |
-            build/*.dmg
-            build/install.sh
+            SignaturePro-${{ needs.setup.outputs.version }}.zip
+            install-signaturepro.sh
+          name: SignaturePro ${{ needs.setup.outputs.version }}
           body: |
-            ## SignaturePro v${{ github.ref_name }}
+            ## SignaturePro ${{ needs.setup.outputs.version }}
             
-            **Quick Fix for "damaged" error:**
-            1. Download and mount the DMG
-            2. Drag SignaturePro.app to Applications
-            3. Download and run `install.sh` script, OR
-            4. Run in Terminal: `sudo xattr -r -d com.apple.quarantine "/Applications/SignaturePro.app"`
-            5. Right-click app → Open → Open
+            ### Installation Options:
+            
+            **Option 1 - Automatic (Recommended):**
+            1. Download `install-signaturepro.sh`
+            2. Run: `chmod +x install-signaturepro.sh && ./install-signaturepro.sh`
+            
+            **Option 2 - Manual:**
+            1. Download `SignaturePro-${{ needs.setup.outputs.version }}.zip`
+            2. Extract and drag to Applications folder
+            3. Run: `sudo xattr -r -d com.apple.quarantine "/Applications/SignaturePro.app"`
+            4. Right-click app → Open → Open
+            
+            ### System Requirements:
+            - macOS 10.15 or later
+            - No additional dependencies required
+          draft: false
+          prerelease: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
