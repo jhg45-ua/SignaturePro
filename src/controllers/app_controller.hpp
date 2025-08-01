@@ -39,6 +39,7 @@ public:
     std::shared_ptr<LoggingService> GetLoggingService() const { return logging_service_; }
 
 private:
+    private:
     // Servicios
     std::shared_ptr<LoggingService> logging_service_;
     
@@ -48,6 +49,9 @@ private:
     // Clean Architecture Controller
     std::unique_ptr<Presentation::Controllers::ApplicationController> presentation_controller_;
     
-    // Métodos privados de inicialización
+    // Flag para evitar múltiples llamadas a Shutdown
+    bool shutdown_called_;
+    
+    // Inicialización de servicios
     void InitializeServices();
 };

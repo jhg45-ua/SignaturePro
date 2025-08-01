@@ -9,11 +9,14 @@
 #include "../presentation/controllers/application_controller.hpp"
 
 AppController::AppController() 
-    : logging_service_(nullptr), main_frame_(nullptr), presentation_controller_(nullptr) {
+    : logging_service_(nullptr), main_frame_(nullptr), presentation_controller_(nullptr), shutdown_called_(false) {
 }
 
 AppController::~AppController() {
-    Shutdown();
+    // Solo llamar Shutdown si no se ha llamado ya
+    if (logging_service_ || presentation_controller_ || main_frame_) {
+        Shutdown();
+    }
 }
 
 bool AppController::Initialize() {
@@ -72,19 +75,43 @@ void AppController::CreateMainWindow() {
 }
 
 void AppController::Shutdown() {
+    // Evitar múltiples llamadas a Shutdown
+    if (shutdown_called_) {
+        return;
+    }
+    shutdown_called_ = true;
+    
     if (logging_service_) {
         logging_service_->LogInfo("Cerrando aplicación...");
     }
     
-    // Cerrar controlador de presentación
+    // Cerrar controlador de presentación primero
     if (presentation_controller_) {
-        presentation_controller_->Shutdown();
+        try {
+            presentation_controller_->Shutdown();
+        } catch (const std::exception& e) {
+            // Log error but continue cleanup
+            if (logging_service_) {
+                logging_service_->LogError("Error en Shutdown del presentation controller: " + std::string(e.what()));
+            }
+        }
         presentation_controller_.reset();
     }
     
-    // Limpiar recursos
-    main_frame_.reset();
-    logging_service_.reset();
+    // Limpiar frame
+    if (main_frame_) {
+        main_frame_.reset();
+    }
+    
+    // Limpiar logging service al final
+    if (logging_service_) {
+        try {
+            logging_service_->LogInfo("Aplicación cerrada correctamente");
+        } catch (...) {
+            // Ignore any logging errors during shutdown
+        }
+        logging_service_.reset();
+    }
 }
 
 void AppController::InitializeServices() {

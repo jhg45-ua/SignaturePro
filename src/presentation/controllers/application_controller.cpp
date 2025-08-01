@@ -30,14 +30,24 @@ namespace Presentation {
         }
         
         void ApplicationController::Shutdown() {
-            if (initialized_) {
+            if (!initialized_) {
+                return; // Ya se hizo shutdown o nunca se inicializó
+            }
+            
+            try {
                 auto app = GetApplication();
                 if (app) {
                     app->Shutdown();
-                    app_repository_->SaveApplicationState(*app);
+                    if (app_repository_) {
+                        app_repository_->SaveApplicationState(*app);
+                    }
                 }
-                initialized_ = false;
+            } catch (const std::exception& e) {
+                // Log error but continue with cleanup
+                // No podemos usar logging aquí porque puede estar siendo destruido
             }
+            
+            initialized_ = false;
         }
         
         std::shared_ptr<Domain::Entities::Application> ApplicationController::GetApplication() const {

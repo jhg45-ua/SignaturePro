@@ -10,7 +10,11 @@ MyApp::MyApp() : app_controller_(nullptr) {
 }
 
 MyApp::~MyApp() {
-    // El destructor se encarga de limpiar automáticamente
+    // Limpiar explícitamente el controlador antes de la destrucción automática
+    if (app_controller_) {
+        app_controller_->Shutdown();
+        app_controller_.reset();
+    }
 }
 
 bool MyApp::OnInit() {
@@ -26,4 +30,14 @@ bool MyApp::OnInit() {
     app_controller_->CreateMainWindow();
     
     return true;
+}
+
+int MyApp::OnExit() {
+    // Hacer cleanup explícito antes de que wxWidgets limpie sus recursos
+    if (app_controller_) {
+        app_controller_->Shutdown();
+        app_controller_.reset();
+    }
+    
+    return wxApp::OnExit();
 }

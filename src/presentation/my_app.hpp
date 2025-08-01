@@ -23,6 +23,12 @@ public:
      * @return true si la inicialización fue exitosa
      */
     virtual bool OnInit() override;
+    
+    /**
+     * Función que se ejecuta al salir de la aplicación
+     * @return código de salida
+     */
+    virtual int OnExit() override;
 
 private:
     std::unique_ptr<AppController> app_controller_;
