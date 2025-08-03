@@ -9,8 +9,8 @@ on:
       - main
 
 jobs:
-  nightly:
-    name: Nightly Build
+  setup:
+    name: Setup Environment
     runs-on: macos-latest
     steps:
       - name: Checkout repository
@@ -21,6 +21,11 @@ jobs:
           brew update
           brew install spdlog wxwidgets
 
+  build:
+    name: Build and Verify Application
+    runs-on: macos-latest
+    needs: setup
+    steps:
       - name: Build application
         run: |
           cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
@@ -69,6 +74,11 @@ jobs:
           xattr -cr "$APP_PATH"
           codesign --verify --verbose "$APP_PATH"
 
+  release:
+    name: Prepare and Publish Release
+    runs-on: macos-latest
+    needs: build
+    steps:
       - name: Create nightly package
         run: |
           TIMESTAMP=$(date +'%Y-%m-%dT%H-%M-%S')
@@ -126,7 +136,29 @@ jobs:
           ls -la install-signaturepro-nightly.sh
           gh release create nightly \
             --title "🌙 Nightly Build (${TIMESTAMP})" \
-            --notes "🚧 **Development Build - Use at your own risk**\n\nThis is an automated nightly build from the latest main branch.\n\n### Build Information\n- **Commit:** ${GITHUB_SHA} \n- **Branch:** main\n- **Build Type:** Release\n- **Timestamp:** ${TIMESTAMP}\n\n### Installation Instructions\n1. **Download the following files:**\n   - `SignaturePro-${NIGHTLY_VERSION}.zip`\n   - `install-signaturepro-nightly.sh`\n2. **Run the following commands:**\n   ```bash\n   chmod +x install-signaturepro-nightly.sh\n   ./install-signaturepro-nightly.sh\n   ```\n\n### ⚠️ **Warning**\nThis is a development build and may contain bugs, incomplete features, or break existing functionality." \
+            --notes "🚧 **Development Build - Use at your own risk**
+
+This is an automated nightly build from the latest main branch.
+
+### Build Information
+- **Commit:** ${GITHUB_SHA}
+- **Branch:** main
+- **Build Type:** Release
+- **Timestamp:** ${TIMESTAMP}
+
+### Installation Instructions
+1. **Download the following files:**
+   - \`SignaturePro-${NIGHTLY_VERSION}.zip\`
+   - \`install-signaturepro-nightly.sh\`
+
+2. **Run the following commands:**
+   \`\`\`bash
+   chmod +x install-signaturepro-nightly.sh
+   ./install-signaturepro-nightly.sh
+   \`\`\`
+
+### ⚠️ **Warning**
+This is a development build and may contain bugs, incomplete features, or break existing functionality." \
             --prerelease \
             "SignaturePro-${NIGHTLY_VERSION}.zip" \
             "install-signaturepro-nightly.sh"
