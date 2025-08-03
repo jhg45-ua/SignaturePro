@@ -14,16 +14,22 @@ MyApp::~MyApp() {
 }
 
 bool MyApp::OnInit() {
-    // Crear el controlador principal de la aplicación
-    app_controller_ = std::make_unique<AppController>();
-    
-    // Inicializar el controlador
-    if (!app_controller_->Initialize()) {
+    try {
+        // Crear el controlador principal de la aplicación
+        app_controller_ = std::make_unique<AppController>();
+
+        // Inicializar el controlador
+        if (!app_controller_->Initialize()) {
+            return false;
+        }
+
+        // Crear y mostrar la ventana principal
+        app_controller_->CreateMainWindow();
+
+        return true;
+    } catch (const std::exception& e) {
+        // Manejo de errores: registrar excepción
+        std::cerr << "Error durante la inicialización de la aplicación: " << e.what() << std::endl;
         return false;
     }
-    
-    // Crear y mostrar la ventana principal
-    app_controller_->CreateMainWindow();
-    
-    return true;
 }

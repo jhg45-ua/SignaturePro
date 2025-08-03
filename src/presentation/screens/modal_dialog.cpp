@@ -59,23 +59,29 @@ ModalDialog::~ModalDialog() {
 }
 
 void ModalDialog::InitializeComponents() {
-    // Crear interfaz
-    CreateInterface();
-    
-    // Configurar layout
-    ConfigureLayout();
-    
-    // Configuración final del diálogo
-    SetMinSize(wxSize(800, 650));  // Más alto para mejor espaciado
-    SetSize(800, 650);
-    Center();
-    
-    // Establecer foco inicial en el primer campo
-    name_input_->SetFocus();
-    
-    // Forzar actualización del layout
-    Layout();
-    Refresh();
+    try {
+        // Crear interfaz
+        CreateInterface();
+
+        // Configurar layout
+        ConfigureLayout();
+
+        // Configuración final del diálogo
+        SetMinSize(wxSize(800, 650));  // Más alto para mejor espaciado
+        SetSize(800, 650);
+        Center();
+
+        // Establecer foco inicial en el primer campo
+        name_input_->SetFocus();
+
+        // Forzar actualización del layout
+        Layout();
+        Refresh();
+    } catch (const std::exception& e) {
+        // Manejo de errores: registrar excepción
+        spdlog::error("Error durante la inicialización de componentes: {}", e.what());
+        throw;
+    }
 }
 
 void ModalDialog::CreateInterface() {

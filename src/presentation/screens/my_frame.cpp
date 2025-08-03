@@ -56,22 +56,28 @@ MyFrame::~MyFrame() {
  * Configura el sistema de menús, barra de estado y la interfaz principal.
  */
 void MyFrame::InitializeComponents() {
-    // Crear sistema de menús
-    CreateMenuSystem();
-    
-    // Crear barra de estado
-    CreateStatusBar();
-    SetStatusText(Constants::Status::APP_READY);
-    
-    // Crear interfaz principal
-    CreateMainInterface();
-    
-    // Configurar layout
-    ConfigureLayout();
-    
-    // Configuración final de la ventana
-    SetSize(Constants::Window::DEFAULT_WIDTH, Constants::Window::DEFAULT_HEIGHT);
-    Center();
+    try {
+        // Crear sistema de menús
+        CreateMenuSystem();
+
+        // Crear barra de estado
+        CreateStatusBar();
+        SetStatusText(Constants::Status::APP_READY);
+
+        // Crear interfaz principal
+        CreateMainInterface();
+
+        // Configurar layout
+        ConfigureLayout();
+
+        // Configuración final de la ventana
+        SetSize(Constants::Window::DEFAULT_WIDTH, Constants::Window::DEFAULT_HEIGHT);
+        Center();
+    } catch (const std::exception& e) {
+        // Manejo de errores: registrar excepción
+        spdlog::error("Error durante la inicialización de componentes de la ventana principal: {}", e.what());
+        throw;
+    }
 }
 
 void MyFrame::CreateMenuSystem() {

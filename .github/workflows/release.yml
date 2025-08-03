@@ -7,194 +7,8 @@ on:
   push:
     tags:
       - 'v*'
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
 
 jobs:
-  nightly:
-    name: Nightly Build
-    runs-on: macos-latest
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && !startsWith(github.ref, 'refs/tags/')
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Setup dependencies
-        run: |
-          brew update
-          brew install spdlog wxwidgets
-
-      - name: Build application
-        run: |
-          cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
-          cmake --build build --parallel
-
-      - name: Verify and prepare nightly app
-        run: |
-          echo "Checking nightly build output:"
-          ls -la build/bin/
-          
-          # Check if we have the .app bundle (Release mode) or just executable (Debug mode)
-          if [ -d "build/bin/SignaturePro.app" ]; then
-            echo "Found SignaturePro.app bundle"
-            APP_PATH="build/bin/SignaturePro.app"
-          elif [ -f "build/bin/app" ]; then
-            echo "Found standalone executable, creating bundle structure..."
-            # Create app bundle structure for nightly
-            mkdir -p "build/bin/SignaturePro.app/Contents/MacOS"
-            mkdir -p "build/bin/SignaturePro.app/Contents/Resources"
-            
-            # Copy executable
-            cp "build/bin/app" "build/bin/SignaturePro.app/Contents/MacOS/SignaturePro"
-            chmod +x "build/bin/SignaturePro.app/Contents/MacOS/SignaturePro"
-            
-            # Create basic Info.plist for nightly
-            cat > "build/bin/SignaturePro.app/Contents/Info.plist" << 'EOF'
-          <?xml version="1.0" encoding="UTF-8"?>
-          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-          <plist version="1.0">
-          <dict>
-              <key>CFBundleExecutable</key>
-              <string>SignaturePro</string>
-              <key>CFBundleIdentifier</key>
-              <string>com.signaturepro.app.nightly</string>
-              <key>CFBundleName</key>
-              <string>SignaturePro Nightly</string>
-              <key>CFBundleVersion</key>
-              <string>0.0.1-nightly</string>
-              <key>CFBundleShortVersionString</key>
-              <string>0.0.1-nightly</string>
-              <key>CFBundlePackageType</key>
-              <string>APPL</string>
-          </dict>
-          </plist>
-          EOF
-            
-            APP_PATH="build/bin/SignaturePro.app"
-            echo "Created app bundle structure"
-          else
-            echo "Error: Neither SignaturePro.app nor app executable found!"
-            exit 1
-          fi
-          
-          # Sign the application
-          codesign --force --deep --sign - "$APP_PATH"
-          
-          # Remove quarantine attributes
-          xattr -cr "$APP_PATH"
-          
-          # Verify signature
-          codesign --verify --verbose "$APP_PATH"
-
-      - name: Create nightly package
-        run: |
-          # Create timestamp for nightly version
-          TIMESTAMP=$(date +%Y%m%d-%H%M%S)
-          SHORT_SHA=${GITHUB_SHA::7}
-          NIGHTLY_VERSION="nightly-${TIMESTAMP}-${SHORT_SHA}"
-          
-          echo "Creating nightly package: $NIGHTLY_VERSION"
-          
-          # Store version for later steps
-          echo "NIGHTLY_VERSION=${NIGHTLY_VERSION}" >> $GITHUB_ENV
-          echo "TIMESTAMP=${TIMESTAMP}" >> $GITHUB_ENV
-          echo "SHORT_SHA=${SHORT_SHA}" >> $GITHUB_ENV
-          
-          # Create ZIP
-          cd build/bin
-          zip -r ../../SignaturePro-${NIGHTLY_VERSION}.zip SignaturePro.app
-          cd ../..
-          
-          # Verify ZIP was created
-          ls -la SignaturePro-${NIGHTLY_VERSION}.zip
-          
-          # Create nightly installation script
-          cat > install-signaturepro-nightly.sh << EOF
-          #!/bin/bash
-          echo "SignaturePro Nightly Installer"
-          echo "=============================="
-          echo "Version: ${NIGHTLY_VERSION}"
-          echo ""
-          
-          # Get the ZIP file name
-          ZIP_FILE=\$(ls SignaturePro-nightly-*.zip 2>/dev/null | head -1)
-          
-          if [ -z "\$ZIP_FILE" ]; then
-            echo "Error: No SignaturePro nightly ZIP file found in current directory"
-            echo "Please download the SignaturePro-nightly-*.zip file first"
-            exit 1
-          fi
-          
-          echo "Found: \$ZIP_FILE"
-          
-          # Check if app exists in Applications
-          if [ -d "/Applications/SignaturePro.app" ]; then
-              echo "Removing existing installation..."
-              sudo rm -rf "/Applications/SignaturePro.app"
-          fi
-          
-          # Extract and install
-          echo "Installing SignaturePro nightly..."
-          unzip -q "\$ZIP_FILE"
-          sudo mv SignaturePro.app /Applications/
-          
-          # Remove quarantine
-          sudo xattr -r -d com.apple.quarantine "/Applications/SignaturePro.app" 2>/dev/null || true
-          
-          echo "Nightly installation complete!"
-          echo "You can now run SignaturePro from Applications folder."
-          echo ""
-          echo "⚠️  This is a development build and may contain bugs."
-          EOF
-          chmod +x install-signaturepro-nightly.sh
-
-      - name: Delete previous nightly release
-        continue-on-error: true
-        run: |
-          # Try to delete previous nightly release
-          gh release delete nightly --yes || echo "No previous nightly release found"
-          git push origin :refs/tags/nightly || echo "No previous nightly tag found"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Create nightly release
-        run: |
-          # Create and push nightly tag
-          git tag nightly
-          git push origin nightly
-          
-          # List files to verify they exist
-          echo "Files to upload:"
-          ls -la SignaturePro-${NIGHTLY_VERSION}.zip
-          ls -la install-signaturepro-nightly.sh
-          
-          # Create nightly release
-          gh release create nightly \
-            --title "🌙 Nightly Build (${TIMESTAMP})" \
-            --notes "**🚧 Development Build - Use at your own risk**
-
-          This is an automated nightly build from the latest main branch.
-          
-          **Build Info:**
-          - Commit: ${GITHUB_SHA}
-          - Branch: main
-          - Build Type: Release
-          - Timestamp: ${TIMESTAMP}
-          
-          **Installation:**
-          1. Download \`SignaturePro-${NIGHTLY_VERSION}.zip\` and \`install-signaturepro-nightly.sh\`
-          2. Run: \`chmod +x install-signaturepro-nightly.sh && ./install-signaturepro-nightly.sh\`
-          
-          **⚠️ Warning:** This is a development build and may contain bugs, incomplete features, or break existing functionality." \
-            --prerelease \
-            "SignaturePro-${NIGHTLY_VERSION}.zip" \
-            "install-signaturepro-nightly.sh"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
   build-and-release:
     name: Build and Release
     runs-on: macos-latest
@@ -217,70 +31,43 @@ jobs:
         run: |
           echo "Checking build output:"
           ls -la build/bin/
-          
-          # Verify the app bundle exists
           if [ ! -d "build/bin/SignaturePro.app" ]; then
             echo "Error: SignaturePro.app not found!"
             exit 1
           fi
-          
           echo "App bundle contents:"
           ls -la build/bin/SignaturePro.app/
-          
-          # Sign the application
           codesign --force --deep --sign - build/bin/SignaturePro.app
-          
-          # Remove quarantine attributes
           xattr -cr build/bin/SignaturePro.app
-          
-          # Verify signature
           codesign --verify --verbose build/bin/SignaturePro.app
 
       - name: Create release package
         run: |
-          # Extract version from tag
           VERSION=${GITHUB_REF#refs/tags/}
           echo "Creating package for version: $VERSION"
-          
-          # Create ZIP
           cd build/bin
           zip -r ../../SignaturePro-${VERSION}.zip SignaturePro.app
           cd ../..
-          
-          # Verify ZIP was created
           ls -la SignaturePro-${VERSION}.zip
-          
-          # Create installation script
           cat > install-signaturepro.sh << 'EOF'
           #!/bin/bash
           echo "SignaturePro Installer"
           echo "====================="
-          
-          # Get the ZIP file name
           ZIP_FILE=$(ls SignaturePro-*.zip 2>/dev/null | head -1)
-          
           if [ -z "$ZIP_FILE" ]; then
             echo "Error: No SignaturePro ZIP file found in current directory"
             echo "Please download the SignaturePro-*.zip file first"
             exit 1
           fi
-          
           echo "Found: $ZIP_FILE"
-          
-          # Check if app exists in Applications
           if [ -d "/Applications/SignaturePro.app" ]; then
               echo "Removing existing installation..."
               sudo rm -rf "/Applications/SignaturePro.app"
           fi
-          
-          # Extract and install
           echo "Installing SignaturePro..."
           unzip -q "$ZIP_FILE"
           sudo mv SignaturePro.app /Applications/
-          
-          # Remove quarantine
           sudo xattr -r -d com.apple.quarantine "/Applications/SignaturePro.app" 2>/dev/null || true
-          
           echo "Installation complete!"
           echo "You can now run SignaturePro from Applications folder."
           EOF
@@ -295,24 +82,20 @@ jobs:
           name: SignaturePro ${{ github.ref_name }}
           body: |
             ## SignaturePro ${{ github.ref_name }}
-            
             ### Installation Options:
-            
             **Option 1 - Automatic (Recommended):**
             1. Download both files: `SignaturePro-${{ github.ref_name }}.zip` and `install-signaturepro.sh`
             2. Put them in the same folder
             3. Run: `chmod +x install-signaturepro.sh && ./install-signaturepro.sh`
-            
             **Option 2 - Manual:**
             1. Download `SignaturePro-${{ github.ref_name }}.zip`
             2. Extract and drag SignaturePro.app to Applications folder
             3. Run: `sudo xattr -r -d com.apple.quarantine "/Applications/SignaturePro.app"`
             4. Right-click app → Open → Open
-            
             ### System Requirements:
             - macOS 10.15 or later
             - No additional dependencies required
           draft: false
           prerelease: false
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

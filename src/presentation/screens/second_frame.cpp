@@ -43,24 +43,30 @@ SecondFrame::~SecondFrame() {
 }
 
 void SecondFrame::InitializeComponents() {
-    // Crear barra de estado
-    CreateStatusBar();
-    SetStatusText("Segunda página activa");
-    
-    // Crear interfaz
-    CreateInterface();
-    
-    // Configurar layout
-    ConfigureLayout();
-    
-    // Configuración final de la ventana
-    SetMinSize(wxSize(600, 500));  // Tamaño mínimo más grande
-    SetSize(600, 500);             // Tamaño inicial más grande
-    Center();
-    
-    // Forzar actualización del layout
-    Layout();
-    Refresh();
+    try {
+        // Crear barra de estado
+        CreateStatusBar();
+        SetStatusText("Segunda página activa");
+
+        // Crear interfaz
+        CreateInterface();
+
+        // Configurar layout
+        ConfigureLayout();
+
+        // Configuración final de la ventana
+        SetMinSize(wxSize(600, 500));  // Tamaño mínimo más grande
+        SetSize(600, 500);             // Tamaño inicial más grande
+        Center();
+
+        // Forzar actualización del layout
+        Layout();
+        Refresh();
+    } catch (const std::exception& e) {
+        // Manejo de errores: registrar excepción
+        spdlog::error("Error durante la inicialización de componentes de la segunda ventana: {}", e.what());
+        throw;
+    }
 }
 
 void SecondFrame::CreateInterface() {
