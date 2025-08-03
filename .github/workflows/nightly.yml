@@ -138,27 +138,27 @@ jobs:
             --title "🌙 Nightly Build (${TIMESTAMP})" \
             --notes "🚧 **Development Build - Use at your own risk**
 
-This is an automated nightly build from the latest main branch.
+            This is an automated nightly build from the latest main branch.
 
-### Build Information
-- **Commit:** ${GITHUB_SHA}
-- **Branch:** main
-- **Build Type:** Release
-- **Timestamp:** ${TIMESTAMP}
+            ### Build Information
+            - **Commit:** ${GITHUB_SHA}
+            - **Branch:** main
+            - **Build Type:** Release
+            - **Timestamp:** ${TIMESTAMP}
 
-### Installation Instructions
-1. **Download the following files:**
-   - \`SignaturePro-${NIGHTLY_VERSION}.zip\`
-   - \`install-signaturepro-nightly.sh\`
+            ### Installation Instructions
+            1. **Download the following files:**
+               - \`SignaturePro-${NIGHTLY_VERSION}.zip\`
+               - \`install-signaturepro-nightly.sh\`
 
-2. **Run the following commands:**
-   \`\`\`bash
-   chmod +x install-signaturepro-nightly.sh
-   ./install-signaturepro-nightly.sh
-   \`\`\`
+            2. **Run the following commands:**
+               \`\`\`bash
+               chmod +x install-signaturepro-nightly.sh
+               ./install-signaturepro-nightly.sh
+               \`\`\`
 
-### ⚠️ **Warning**
-This is a development build and may contain bugs, incomplete features, or break existing functionality." \
+            ### ⚠️ **Warning**
+            This is a development build and may contain bugs, incomplete features, or break existing functionality." \
             --prerelease \
             "SignaturePro-${NIGHTLY_VERSION}.zip" \
             "install-signaturepro-nightly.sh"
