@@ -71,7 +71,7 @@ jobs:
 
       - name: Create nightly package
         run: |
-          TIMESTAMP=$(date +'%Y-%m-%d %H:%M:%S')
+          TIMESTAMP=$(date +'%Y-%m-%dT%H-%M-%S')
           SHORT_SHA=${GITHUB_SHA::7}
           NIGHTLY_VERSION="nightly-${TIMESTAMP}-${SHORT_SHA}"
           echo "NIGHTLY_VERSION=${NIGHTLY_VERSION}" >> $GITHUB_ENV
