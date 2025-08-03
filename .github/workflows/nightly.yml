@@ -9,10 +9,11 @@ on:
       - main
 
 jobs:
-  setup:
-    name: Setup Environment
+  nightly:
+    name: Nightly Build
     runs-on: macos-latest
     steps:
+      # Group 1: Setup
       - name: Checkout repository
         uses: actions/checkout@v4
 
@@ -21,11 +22,7 @@ jobs:
           brew update
           brew install spdlog wxwidgets
 
-  build:
-    name: Build and Verify Application
-    runs-on: macos-latest
-    needs: setup
-    steps:
+      # Group 2: Build and Verification
       - name: Build application
         run: |
           cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
@@ -74,11 +71,7 @@ jobs:
           xattr -cr "$APP_PATH"
           codesign --verify --verbose "$APP_PATH"
 
-  release:
-    name: Prepare and Publish Release
-    runs-on: macos-latest
-    needs: build
-    steps:
+      # Group 3: Release Preparation
       - name: Create nightly package
         run: |
           TIMESTAMP=$(date +'%Y-%m-%dT%H-%M-%S')
