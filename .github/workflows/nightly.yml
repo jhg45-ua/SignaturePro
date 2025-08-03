@@ -71,7 +71,7 @@ jobs:
 
       - name: Create nightly package
         run: |
-          TIMESTAMP=$(date +%Y%m%d-%H%M%S)
+          TIMESTAMP=$(date +'%Y-%m-%d %H:%M:%S')
           SHORT_SHA=${GITHUB_SHA::7}
           NIGHTLY_VERSION="nightly-${TIMESTAMP}-${SHORT_SHA}"
           echo "NIGHTLY_VERSION=${NIGHTLY_VERSION}" >> $GITHUB_ENV
@@ -126,7 +126,7 @@ jobs:
           ls -la install-signaturepro-nightly.sh
           gh release create nightly \
             --title "🌙 Nightly Build (${TIMESTAMP})" \
-            --notes "**🚧 Development Build - Use at your own risk**\n\nThis is an automated nightly build from the latest main branch.\n\n**Build Info:**\n- Commit: ${GITHUB_SHA}\n- Branch: main\n- Build Type: Release\n- Timestamp: ${TIMESTAMP}\n\n**Installation:**\n1. Download \`SignaturePro-${NIGHTLY_VERSION}.zip\` and \`install-signaturepro-nightly.sh\`\n2. Run: \`chmod +x install-signaturepro-nightly.sh && ./install-signaturepro-nightly.sh\`\n\n**⚠️ Warning:** This is a development build and may contain bugs, incomplete features, or break existing functionality." \
+            --notes "**🚧 Development Build - Use at your own risk**\n\nThis is an automated nightly build from the latest main branch.\n\n### Build Information\n- **Commit:** ${GITHUB_SHA}\n- **Branch:** main\n- **Build Type:** Release\n- **Timestamp:** $(date -d "${TIMESTAMP}" '+%Y-%m-%d %H:%M:%S')\n\n### Installation Instructions\n1. Download the following files:\n   - \		t`SignaturePro-${NIGHTLY_VERSION}.zip`\n   - \		t`install-signaturepro-nightly.sh`\n2. Run the following commands:\n   ```bash\n   chmod +x install-signaturepro-nightly.sh\n   ./install-signaturepro-nightly.sh\n   ```\n\n### ⚠️ Warning\nThis is a development build and may contain bugs, incomplete features, or break existing functionality." \
             --prerelease \
             "SignaturePro-${NIGHTLY_VERSION}.zip" \
             "install-signaturepro-nightly.sh"
